@@ -1,0 +1,23 @@
+{
+  "name": "wvvw.me",
+  "version": "0.0.0",
+  "description": "wvvw.me website",
+  "main": "app.js",
+  "dependencies": {
+    "request": "^2.40.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OmgImAlexis/wvvw.me"
+  },
+  "author": "OmgImAlexis",
+  "license": "wtfpl",
+  "bugs": {
+    "url": "https://github.com/OmgImAlexis/wvvw.me/issues"
+  },
+  "homepage": "https://github.com/OmgImAlexis/wvvw.me"
+}
