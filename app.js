@@ -29,6 +29,10 @@ app.get('/subdomain/twitter', function(req, res) {
     res.redirect('http://twitter.com/omgimalexis');
 });
 
+app.get('/subdomain/tumblr', function(req, res) {
+    res.redirect('http://reblogalert.tumblr.com');
+});
+
 app.get('/', function(req, res) {
     res.render('index');
 });
