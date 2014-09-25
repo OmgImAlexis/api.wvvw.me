@@ -25,6 +25,10 @@ app.get('/subdomain/github', function(req, res) {
     res.redirect('http://github.com/omgimalexis');
 });
 
+app.get('/subdomain/twitter', function(req, res) {
+    res.redirect('http://twitter.com/omgimalexis');
+});
+
 app.get('/', function(req, res) {
     res.render('index');
 });
