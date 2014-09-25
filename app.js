@@ -7,6 +7,10 @@ var accessLogStream = fs.createWriteStream(__dirname + '/access.log', {
     flags: 'a'
 });
 
+app.use(morgan('combined', {
+    stream: accessLogStream
+}))
+
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
@@ -17,10 +21,6 @@ app.use(subdomain({
 
 app.use('/subdomain/assets/', express.static(__dirname + '/public'));
 
-app.use(morgan('combined', {
-    stream: accessLogStream
-}))
-
 app.get('/', function(req, res) {
     res.render('index');
 });
@@ -29,6 +29,6 @@ app.get('*', function(req, res) {
     res.render('http/404');
 });
 
-var server = app.listen(3000, function() {
+app.listen(3000, function() {
     console.log('Listening on port %d', server.address().port);
 });
