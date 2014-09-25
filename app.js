@@ -33,6 +33,10 @@ app.get('/subdomain/tumblr', function(req, res) {
     res.redirect('http://reblogalert.tumblr.com');
 });
 
+app.get('/subdomain/_', function(req, res) {
+    res.render('_');
+});
+
 app.get('/', function(req, res) {
     res.render('index');
 });
