@@ -21,6 +21,10 @@ app.use(subdomain({
 
 app.use('/subdomain/assets/', express.static(__dirname + '/public'));
 
+app.get('/subdomain/github', function(req, res) {
+    res.redirect('http://github.com/omgimalexis');
+});
+
 app.get('/', function(req, res) {
     res.render('index');
 });
