@@ -39,7 +39,7 @@ app.get('/subdomain/_', function(req, res) {
 
 
 app.get('/subdomain/home', function(req, res) {
-    res.redirect('http://27.33.120.16:3000');
+    res.redner('http://27.33.120.16:3000');
 });
 
 app.get('/', function(req, res) {
