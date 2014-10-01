@@ -9,7 +9,7 @@ var accessLogStream = fs.createWriteStream(__dirname + '/access.log', {
 
 app.use(morgan('combined', {
     stream: accessLogStream
-}))
+}));
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
@@ -35,6 +35,11 @@ app.get('/subdomain/tumblr', function(req, res) {
 
 app.get('/subdomain/_', function(req, res) {
     res.render('_');
+});
+
+
+app.get('/subdomain/home', function(req, res) {
+    res.redirect('http://27.33.120.16');
 });
 
 app.get('/', function(req, res) {
