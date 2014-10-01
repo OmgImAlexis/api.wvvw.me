@@ -37,11 +37,6 @@ app.get('/subdomain/_', function(req, res) {
     res.render('_');
 });
 
-
-app.get('/subdomain/home', function(req, res) {
-    res.render('http://27.33.120.16:3000');
-});
-
 app.get('/', function(req, res) {
     res.render('index');
 });
