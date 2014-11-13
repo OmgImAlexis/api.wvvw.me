@@ -22,11 +22,11 @@ app.use(subdomain({
 app.use('/subdomain/assets/', express.static(__dirname + '/public'));
 
 app.get('/subdomain/github', function(req, res) {
-    res.redirect('http://github.com/omgimalexis');
+    res.redirect('//github.com/omgimalexis');
 });
 
 app.get('/subdomain/twitter', function(req, res) {
-    res.redirect('http://twitter.com/omgimalexis');
+    res.redirect('//twitter.com/omgimalexis');
 });
 
 app.get('/subdomain/tumblr', function(req, res) {
