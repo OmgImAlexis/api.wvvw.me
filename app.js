@@ -25,7 +25,7 @@ app.set('view engine', 'jade');
 
 var env = process.env.NODE_ENV || 'production';
 
-if (!env == 'dev') {
+if (env != 'dev') {
     app.use(function(req, res, next) {
         if((!req.secure) && (req.get('X-Forwarded-Proto') !== 'https')) {
             res.redirect('https://' + req.get('Host') + req.url);
