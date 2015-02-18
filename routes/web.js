@@ -31,10 +31,11 @@ module.exports = (function() {
         });
     });
 
-    app.get('/search/:searchTerms', function(req, res){
+    app.get('/search', function(req, res){
+        var searchTerms = req.query.searchTerms;
         Post.find({
             $text : {
-                $search : req.params.searchTerms
+                $search : searchTerms
             }
         },{
             score : {

@@ -31,9 +31,9 @@ html
                                     a(href="/tagged/nodejs") NODE.JS
                                 li
                                     a(href="/tagged/php") PHP
-                    form.navbar-form.navbar-right
+                    form.navbar-form.navbar-right(action="/search", method="get")
                         .input-group
-                            input.form-control(type="text", placeholder="Search")
+                            input.form-control(type="text", placeholder="Search", name="searchTerms")
                             span.input-group-btn
                                 button.btn.btn-default(type="button") Go!
         #content
