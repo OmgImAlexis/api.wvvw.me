@@ -1,10 +1,19 @@
-var express = require('express');
-var subdomain = require('subdomain')
-var app = express();
-var morgan = require('morgan');
-var fs = require('fs');
+var express = require('express'),
+    morgan = require('morgan'),
+    mongoose = require('mongoose'),
+    fs = require('fs');
+
+var app = express()
+
 var accessLogStream = fs.createWriteStream(__dirname + '/access.log', {
     flags: 'a'
+});
+
+mongoose.connect('mongodb://localhost:27017/wvvwme', function() {
+    console.error('Connected to MongoDB.');
+});
+mongoose.connection.on('error', function() {
+    console.error('MongoDB Connection Error. Make sure MongoDB is running.');
 });
 
 app.use(morgan('combined', {
@@ -14,40 +23,19 @@ app.use(morgan('combined', {
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
-app.use(subdomain({
-    base: 'wvvw.me',
-    removeWWW: true
-}));
+if (!process.env.NODE_ENV == 'dev') {
+    app.use(function(req, res, next) {
+        if((!req.secure) && (req.get('X-Forwarded-Proto') !== 'https')) {
+            res.redirect('https://' + req.get('Host') + req.url);
+        } else {
+            next();
+        }
+    });
+}
 
-app.use(function(req, res, next) {
-    if((!req.secure) && (req.get('X-Forwarded-Proto') !== 'https')) {
-        res.redirect('https://' + req.get('Host') + req.url);
-    } else {
-        next();
-    }
-});
+app.use(express.static(__dirname + '/public'));
 
-app.use('/subdomain/assets/', express.static(__dirname + '/public'));
-
-app.get('/subdomain/github', function(req, res) {
-    res.redirect('//github.com/omgimalexis');
-});
-
-app.get('/subdomain/twitter', function(req, res) {
-    res.redirect('//twitter.com/omgimalexis');
-});
-
-app.get('/subdomain/tumblr', function(req, res) {
-    res.redirect('http://reblogalert.tumblr.com');
-});
-
-app.get('/subdomain/_', function(req, res) {
-    res.render('_');
-});
-
-app.get('/', function(req, res) {
-    res.render('index');
-});
+app.use('/', require('./routes/web.js'));
 
 app.get('*', function(req, res) {
     res.render('http/404');
