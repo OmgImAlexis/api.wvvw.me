@@ -25,6 +25,12 @@ module.exports = (function() {
         res.render('about');
     });
 
+    app.get('/tagged/:tag', function(req, res){
+        Post.find({tags: req.params.tag}).sort({'_id': -1}).limit(10).exec(function(err, posts) {
+            res.render('index', posts);
+        });
+    });
+
     app.get('/search/:searchTerms', function(req, res){
         Post.find({
             $text : {

@@ -6,7 +6,8 @@ var postSchema = new mongoose.Schema({
     published: { type: Boolean, required: true },
     title: { type: String, required: true },
     content: { type: String, required: true },
-    slug: { type: String }
+    slug: { type: String },
+    tags : { type : Array , "default" : [] }
 });
 
 postSchema.index({ title: 'text', content: 'text', slug: 'text' });
