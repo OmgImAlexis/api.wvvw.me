@@ -15,7 +15,7 @@ html
                         span.icon-bar
                         span.icon-bar
                     a.navbar-brand(href="/")
-                        strong WVVW.
+                        strong WVVW.ME
                 .collapse.navbar-collapse.navbar-ex1-collapse
                     ul.nav.navbar-nav
                         li.active
@@ -24,19 +24,41 @@ html
                             a(href="/about") ABOUT
                         li.dropdown
                             a.dropdown-toggle(href="#", data-toggle="dropdown")
-                                | CONTACT
+                                | LANGUAGES
                                 b.caret
                             ul.dropdown-menu
                                 li
-                                    a(href="/contact") CONTACT
+                                    a(href="/tagged/nodejs") NODE.JS
                                 li
-                                    a(href="/contact") CONTACT WITH SIDEBAR
+                                    a(href="/tagged/php") PHP
                     form.navbar-form.navbar-right
                         .input-group
                             input.form-control(type="text", placeholder="Search")
                             span.input-group-btn
                                 button.btn.btn-default(type="button") Go!
         #content
-            block content
+            .container
+                .row
+                    if(!layout.fullWidth)
+                        .col-lg-8.col-md-8
+                            block content
+                        .col-lg-4.col-md-4
+                            #sidebars
+                                .sidebar
+                                    h3.title RECENT POSTS
+                                    .content
+                                        ul
+                                            for post in layout.sidebarPosts
+                                                li.recent-post
+                                                    .thumbnail
+                                                        img.img-responsive(src="http://placehold.it/200x250")
+                                                    a(href='/post/' + post.slug)
+                                                        h5 #{post.title}
+                                                        p
+                                                            small
+                                                                i.fa.fa-calendar
+                                                                | 30 June 2015
+                    else
+                        block content
         script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js")
         script(src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/js/bootstrap.min.js")

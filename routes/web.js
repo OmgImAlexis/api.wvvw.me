@@ -8,7 +8,10 @@ module.exports = (function() {
         Post.find({published: true}).sort({'_id': -1}).limit(10).exec(function(err, posts) {
             if (err) console.log(err);
             res.locals = {
-                sidebarPosts: posts
+                layout: {
+                    fullWidth: false,
+                    sidebarPosts: posts
+                }
             };
             next();
         });
@@ -16,6 +19,30 @@ module.exports = (function() {
 
     app.get('/', function(req, res){
         res.render('index');
+    });
+
+    app.get('/about', function(req, res){
+        res.render('about');
+    });
+
+    app.get('/search/:searchTerms', function(req, res){
+        Post.find({
+            $text : {
+                $search : req.params.searchTerms
+            }
+        },{
+            score : {
+                $meta: 'textScore'
+            }
+        }).sort({
+            score : {
+                $meta : 'textScore'
+            }
+        }).exec(function(err, posts) {
+            if (err) console.log(err);
+            // res.render('search');
+            res.send(posts);
+        });
     });
 
     app.get('/post/:slug', function(req, res){

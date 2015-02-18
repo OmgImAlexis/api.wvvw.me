@@ -9,6 +9,8 @@ var postSchema = new mongoose.Schema({
     slug: { type: String }
 });
 
+postSchema.index({ title: 'text', content: 'text', slug: 'text' });
+
 function slugify(text) {
       return text.toString().toLowerCase()
         .replace(/\s+/g, '-')        // Replace spaces with -
