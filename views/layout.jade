@@ -18,19 +18,19 @@ html
                         strong WVVW.ME
                 .collapse.navbar-collapse.navbar-ex1-collapse
                     ul.nav.navbar-nav
-                        li.active
-                            a(href="/") HOME
-                        li
-                            a(href="/about") ABOUT
-                        li.dropdown
-                            a.dropdown-toggle(href="#", data-toggle="dropdown")
-                                | LANGUAGES
-                                b.caret
-                            ul.dropdown-menu
-                                li
-                                    a(href="/tagged/nodejs") NODE.JS
-                                li
-                                    a(href="/tagged/php") PHP
+                        each menu in layout.menus
+                            if (menu.type == 'main')
+                                li(class=(menu.hasActive ? (layout.currentPage == menu.relativeUrl ? "active" : "") : ""))
+                                    a(href=menu.relativeUrl) #{menu.title}
+                            else
+                                li.dropdown
+                                    a.dropdown-toggle(href="#", data-toggle="dropdown")
+                                        | #{menu.title}
+                                        b.caret
+                                    ul.dropdown-menu
+                                        each item in menu.dropdowns
+                                            li
+                                                a(href=item.relativeUrl) #{item.title}
                     form.navbar-form.navbar-right(action="/search", method="get")
                         .input-group
                             input.form-control(type="text", placeholder="Search", name="searchTerms")

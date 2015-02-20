@@ -1,24 +1,40 @@
 var express  = require('express'),
-    Post     = require('../models/Post');
+    _ = require('underscore'),
+    Post = require('../models/Post'),
+    Menu = require('../models/Menu'),
+    User = require('../models/User');
 
 module.exports = (function() {
     var app = express.Router();
 
     app.use(function(req, res, next){
-        Post.find({published: true}).sort({'_id': -1}).limit(10).exec(function(err, posts) {
+        Post.find({published: true}).populate('owner').sort({'_id': -1}).limit(10).exec(function(err, posts) {
             if (err) console.log(err);
-            res.locals = {
-                layout: {
-                    fullWidth: false,
-                    sidebarPosts: posts
-                }
+            res.locals = {};
+            res.locals.layout = {
+                fullWidth: false,
+                sidebarPosts: posts,
+                currentPage: req.path
             };
             next();
         });
     });
 
+    app.use(function(req, res, next){
+        Menu.find({}).exec(function(err, menus){
+            if (err) console.log(err);
+            res.locals.layout.menus = menus;
+            next();
+        });
+    });
+
     app.get('/', function(req, res){
-        res.render('index');
+        Post.find({}).populate('owner').sort({'_id': -1}).limit(10).exec(function(err, posts) {
+            if (err) console.log(err);
+            res.render('index', {
+                posts: posts
+            });
+        });
     });
 
     app.get('/about', function(req, res){
@@ -26,8 +42,10 @@ module.exports = (function() {
     });
 
     app.get('/tagged/:tag', function(req, res){
-        Post.find({tags: req.params.tag}).sort({'_id': -1}).limit(10).exec(function(err, posts) {
-            res.render('index', posts);
+        Post.find({tags: req.params.tag}).populate('owner').sort({'_id': -1}).limit(10).exec(function(err, posts) {
+            res.render('index', {
+                posts: posts
+            });
         });
     });
 
@@ -41,7 +59,7 @@ module.exports = (function() {
             score : {
                 $meta: 'textScore'
             }
-        }).sort({
+        }).populate('owner').sort({
             score : {
                 $meta : 'textScore'
             }
@@ -53,7 +71,7 @@ module.exports = (function() {
     });
 
     app.get('/post/:slug', function(req, res){
-        Post.findOne({slug: req.params.slug}).exec(function(err, post) {
+        Post.findOne({slug: req.params.slug}).populate('owner').exec(function(err, post) {
             if (err) console.log(err);
             if (!post.published) {
                 res.status(200).send({err: 'This post has not been published yet.'});
@@ -61,6 +79,10 @@ module.exports = (function() {
                 res.render('post', post);
             }
         });
+    });
+
+    app.get('/dev', function(req, res){
+        res.send(res.locals);
     });
 
     return app;

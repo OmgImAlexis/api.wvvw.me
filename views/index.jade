@@ -1,3 +1,8 @@
 extends ./layout
 
 block content
+    for post in posts
+        .blog-post.col-lg-12.col-md-12
+            h2.blog-post-title #{post.title}
+            p.blog-post-meta #{post._id.getTimestamp()} by #{post.owner.name.first} #{post.owner.name.last}
+            p=post.content

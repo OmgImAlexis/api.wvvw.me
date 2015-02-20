@@ -473,3 +473,16 @@ body {
 .progress-bar-danger{
     background-color: #e74c3c;
 }
+
+.blog-post {
+    margin-bottom: 60px;
+    background-color: white;
+}
+.blog-post-title {
+    margin-bottom: 5px;
+    font-size: 40px;
+}
+.blog-post-meta {
+    margin-bottom: 20px;
+    color: #999;
+}
