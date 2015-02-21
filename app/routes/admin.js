@@ -8,7 +8,7 @@ module.exports = (function() {
     var app = express.Router();
 
     app.get('/', function(req, res){
-        res.send({user: req.user});
+        res.render('admin/index');
     });
 
     return app;

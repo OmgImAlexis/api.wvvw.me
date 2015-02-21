@@ -31,6 +31,27 @@ html
                                         each item in menu.dropdowns
                                             li
                                                 a(href=item.relativeUrl) #{item.title}
+                    ul.nav.navbar-nav.navbar-right
+                        if (user)
+                            li.dropdown
+                                a.dropdown-toggle(href="#", data-toggle="dropdown")
+                                    | ADMIN
+                                    b.caret
+                                ul.dropdown-menu
+                                    li
+                                        a(href="/admin")
+                                            | Admin Panel
+                                    li.divider
+                                    li
+                                        a(href="/signout")
+                                            | Signout
+                        else
+                            li
+                                a(href="/signin") SIGNIN
+                            li
+                                | 
+                            li
+                                a(href="/signup") SIGNUP
                     form.navbar-form.navbar-right(action="/search", method="get")
                         .input-group
                             input.form-control(type="text", placeholder="Search", name="searchTerms")
