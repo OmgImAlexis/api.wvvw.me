@@ -10,7 +10,6 @@ module.exports = (function() {
     app.use(function(req, res, next){
         Post.find({published: true}).populate('owner').sort({'_id': -1}).limit(10).exec(function(err, posts) {
             if (err) console.log(err);
-            res.locals = {};
             res.locals.layout = {
                 fullWidth: false,
                 sidebarPosts: posts,

@@ -1,7 +1,13 @@
 var express = require('express'),
     morgan = require('morgan'),
+    cookieParser = require('cookie-parser'),
+    bodyParser = require('body-parser'),
+    methodOverride = require('method-override'),
+    session = require('express-session'),
+    MongoStore = require('connect-mongo')(session),
     mongoose = require('mongoose'),
-    fs = require('fs');
+    fs = require('fs'),
+    passport = require('./config/passport.js');
 
 var app = express()
 
@@ -35,9 +41,29 @@ if (env != 'dev') {
     });
 }
 
+app.use(cookieParser());
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+app.use(bodyParser.json());
+app.use(methodOverride());
+app.use(session({
+    secret: 'keyboard cat',
+    name: 'session',
+    store: new MongoStore({mongooseConnection: mongoose.connection}),
+    proxy: true,
+    resave: true,
+    saveUninitialized: true
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use(express.static(__dirname + '/public'));
 
+app.use('/', require('./app/routes/auth.js'));
 app.use('/', require('./app/routes/web.js'));
+app.use('/admin', require('./app/routes/admin.js'));
 
 app.get('*', function(req, res) {
     res.render('http/404');

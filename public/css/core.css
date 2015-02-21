@@ -425,11 +425,6 @@ body {
     background-color: #c0392b;
 }
 
-.thumbnail{
-    border-radius: 0;
-    padding: 0;
-}
-
 .progress{
     height: 30px;
     border-radius: 0;
