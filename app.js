@@ -20,7 +20,7 @@ app.use(morgan('combined', {
     stream: accessLogStream
 }));
 
-app.set('views', __dirname + '/views');
+app.set('views', __dirname + '/app/views');
 app.set('view engine', 'jade');
 
 var env = process.env.NODE_ENV || 'production';
@@ -37,7 +37,7 @@ if (env != 'dev') {
 
 app.use(express.static(__dirname + '/public'));
 
-app.use('/', require('./routes/web.js'));
+app.use('/', require('./app/routes/web.js'));
 
 app.get('*', function(req, res) {
     res.render('http/404');

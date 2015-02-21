@@ -475,8 +475,12 @@ body {
 }
 
 .blog-post {
-    margin-bottom: 60px;
+    margin-bottom: 40px;
     background-color: white;
+}
+.blog-post-unpublished {
+    opacity: 0.4;
+    filter: alpha(opacity=40);
 }
 .blog-post-title {
     margin-bottom: 5px;

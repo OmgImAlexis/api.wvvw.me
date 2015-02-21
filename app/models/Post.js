@@ -23,6 +23,7 @@ function slugify(text) {
 
 postSchema.pre('save', function (next) {
     this.slug = slugify(this.title);
+    this.date = this._id.getTimestamp();
     next();
 });
 
