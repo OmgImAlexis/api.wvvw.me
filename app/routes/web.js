@@ -30,9 +30,18 @@ module.exports = (function() {
     app.get('/', function(req, res){
         Post.find({}).populate('owner').sort({'_id': -1}).limit(10).exec(function(err, posts) {
             if (err) console.log(err);
-            res.render('index', {
-                posts: posts
-            });
+            var Showdown = require('showdown');
+            var converter = new Showdown.converter();
+            var finished = _.after(posts.length, doContinue);
+            for(i = 0; i < posts.length; i++) {
+                posts[i].content = converter.makeHtml(posts[i].content);
+                finished();
+            }
+            function doContinue() {
+                res.render('index', {
+                    posts: posts
+                });
+            };
         });
     });
 

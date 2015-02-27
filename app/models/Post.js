@@ -5,6 +5,7 @@ var postSchema = new mongoose.Schema({
     owner: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     published: { type: Boolean, required: true },
     title: { type: String, required: true },
+    date: { type: Date, required: true },
     content: { type: String, required: true },
     slug: { type: String },
     tags : { type : Array , "default" : [] }
