@@ -2,7 +2,9 @@ var express  = require('express'),
     _ = require('underscore'),
     Post = require('../models/Post'),
     Menu = require('../models/Menu'),
-    User = require('../models/User');
+    User = require('../models/User'),
+    Page = require('../models/Page'),
+    Route = require('../models/Route');
 
 module.exports = (function() {
     var app = express.Router();
@@ -45,10 +47,6 @@ module.exports = (function() {
         });
     });
 
-    app.get('/about', function(req, res){
-        res.render('about');
-    });
-
     app.get('/tagged/:tag', function(req, res){
         Post.find({tags: req.params.tag}).populate('owner').sort({'_id': -1}).limit(10).exec(function(err, posts) {
             res.render('index', {
@@ -78,19 +76,40 @@ module.exports = (function() {
         });
     });
 
-    app.get('/post/:slug', function(req, res){
-        Post.findOne({slug: req.params.slug}).populate('owner').exec(function(err, post) {
+    app.get('/*', function (req, res) {
+        var url = req.url.replace(/^\/|\/$/g, '').split("/");
+        var base = url[0];
+        var slug = url.slice(1).join('/');
+        Route.findOne({base: base}, function(err, route){
             if (err) console.log(err);
-            if (!post.published) {
-                res.status(200).send({err: 'This post has not been published yet.'});
+            if(route) {
+                Post.findOne({slug: slug}).populate('owner').exec(function(err, post) {
+                    if (err) console.log(err);
+                    if (!post) {
+                        res.send('POST NOT FOUND!');
+                    } else {
+                        if (!post.published) {
+                           res.status(200).send({err: 'This post has not been published yet.'});
+                        } else {
+                           res.render('post', post);
+                        }
+                    }
+                });
             } else {
-                res.render('post', post);
+                Page.findOne({url: req.url}, function(err, page){
+                    if (err) console.log(err);
+                    if (!page) {
+                        res.send('404 NO ROUTE FOUND!');
+                    } else {
+                        if (!page.published) {
+                           res.status(200).send({err: 'This page has not been published yet.'});
+                       } else {
+                           res.render('page', page);
+                       }
+                    }
+                });
             }
         });
-    });
-
-    app.get('/dev', function(req, res){
-        res.send(res.locals);
     });
 
     return app;
