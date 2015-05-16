@@ -469,19 +469,19 @@ body {
     background-color: #e74c3c;
 }
 
-.blog-post {
+.blog-post, .page {
     margin-bottom: 40px;
     background-color: white;
 }
-.blog-post-unpublished {
+.blog-post-unpublished, .page-unpublished {
     opacity: 0.4;
     filter: alpha(opacity=40);
 }
-.blog-post-title {
+.blog-post-title, .page-title {
     margin-bottom: 5px;
     font-size: 40px;
 }
-.blog-post-meta {
+.blog-post-meta, .page-post-meta {
     margin-bottom: 20px;
     color: #999;
 }

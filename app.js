@@ -29,18 +29,6 @@ app.use(morgan('combined', {
 app.set('views', __dirname + '/app/views');
 app.set('view engine', 'jade');
 
-var env = process.env.NODE_ENV || 'production';
-
-if (env != 'dev') {
-    app.use(function(req, res, next) {
-        if((!req.secure) && (req.get('X-Forwarded-Proto') !== 'https')) {
-            res.redirect('https://' + req.get('Host') + req.url);
-        } else {
-            next();
-        }
-    });
-}
-
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({
   extended: true

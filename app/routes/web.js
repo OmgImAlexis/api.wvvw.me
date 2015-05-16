@@ -1,5 +1,6 @@
 var express  = require('express'),
     _ = require('underscore'),
+    md = require('marked'),
     Post = require('../models/Post'),
     Menu = require('../models/Menu'),
     User = require('../models/User'),
@@ -41,7 +42,8 @@ module.exports = (function() {
             }
             function doContinue() {
                 res.render('index', {
-                    posts: posts
+                    posts: posts,
+                    md: md
                 });
             };
         });
@@ -76,40 +78,35 @@ module.exports = (function() {
         });
     });
 
-    app.get('/*', function (req, res) {
+    app.get('/*', function (req, res, next) {
         var url = req.url.replace(/^\/|\/$/g, '').split("/");
         var base = url[0];
         var slug = url.slice(1).join('/');
-        Route.findOne({base: base}, function(err, route){
-            if (err) console.log(err);
-            if(route) {
-                Post.findOne({slug: slug}).populate('owner').exec(function(err, post) {
-                    if (err) console.log(err);
-                    if (!post) {
-                        res.send('POST NOT FOUND!');
-                    } else {
-                        if (!post.published) {
-                           res.status(200).send({err: 'This post has not been published yet.'});
-                        } else {
-                           res.render('post', post);
-                        }
-                    }
-                });
-            } else {
-                Page.findOne({url: req.url}, function(err, page){
-                    if (err) console.log(err);
-                    if (!page) {
-                        res.send('404 NO ROUTE FOUND!');
-                    } else {
-                        if (!page.published) {
-                           res.status(200).send({err: 'This page has not been published yet.'});
-                       } else {
-                           res.render('page', page);
-                       }
-                    }
-                });
-            }
-        });
+        if (base == 'post') {
+            Post.findOne({slug: slug}).populate('owner').exec(function(err, post) {
+                if (err) console.log(err);
+                if (!post) {
+                    res.send('POST NOT FOUND!');
+                } else {
+                    res.render('post', {
+                        post: post,
+                        md: md
+                    });
+                }
+            });
+        } else {
+            Page.findOne({url: req.url}, function(err, page){
+                if (err) console.log(err);
+                if (page) {
+                   res.render('page', {
+                       page: page,
+                       md: md
+                   });
+               } else {
+                   next();
+               }
+            });
+        }
     });
 
     return app;

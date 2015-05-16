@@ -8,20 +8,4 @@ block scripts
 
 block content
     for post in posts
-        if (!user)
-            if(post.published)
-                .blog-post.col-lg-12.col-md-12
-                    h2.blog-post-title #{post.title}
-                    p.blog-post-meta
-                        span.date #{post._id.getTimestamp()} 
-                        | 
-                        span.owner by #{post.owner.name.first} #{post.owner.name.last}
-                    p !{post.content}
-        else
-            .blog-post.col-lg-12.col-md-12(class=(!post.published ? 'blog-post-unpublished' : ''), data-meta=post)
-                h2.blog-post-title #{post.title}
-                p.blog-post-meta
-                    span.date #{post._id.getTimestamp()}
-                    | 
-                    span.owner by #{post.owner.name.first} #{post.owner.name.last}
-                p !{post.content}
+        include partitals/post

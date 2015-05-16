@@ -1,4 +1,8 @@
 extends ./layout
 
 block content
-    | #{content}
+    .page.col-lg-12.col-md-12
+        if(page.published)
+            div!= md(page.content)
+        else
+            p This page hasn't been pushished yet.
