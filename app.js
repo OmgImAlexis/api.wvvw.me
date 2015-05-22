@@ -49,6 +49,10 @@ app.use(passport.session());
 
 app.use(express.static(__dirname + '/public'));
 
+app.use('/unloq_cSNJlqmaPjljiZWL.html', function(res, res){
+    res.send('unloq_cSNJlqmaPjljiZWL');
+});
+
 app.use('/', require('./app/routes/auth.js'));
 app.use('/', require('./app/routes/web.js'));
 app.use('/admin', require('./app/routes/admin.js'));
