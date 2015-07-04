@@ -1,11 +1,10 @@
-extends ./layout
-
-block scripts
-    script.
-        $('p.blog-post-meta span.date').each(function(e){
-            $(this).text(moment.tz(moment(new Date($(this).text()).toISOString()).format(), jstz.determine().name()).fromNow());
-        });
+extends ./layouts/main
 
 block content
-    for post in posts
-        include partitals/post
+    .container
+        if(posts.length)
+            for post in posts
+                include partitals/post
+        else
+            .error.styled
+                p There aren't any posts or the DB isn't responding.

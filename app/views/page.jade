@@ -1,7 +1,7 @@
-extends ./layout
+extends ./layouts/main
 
 block content
-    .page.col-lg-12.col-md-12
+    .page
         if(page.published)
             div!= md(page.content)
         else

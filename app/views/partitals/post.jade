@@ -1,19 +1,15 @@
-if (!user)
-    .blog-post.col-lg-12.col-md-12
-        if(post.published)
-            h2.blog-post-title #{post.title}
-            p.blog-post-meta
-                span.date #{post._id.getTimestamp()} 
-                | 
-                span.owner by #{post.owner.name.first} #{post.owner.name.last}
-            div!= md(post.content)
-        else
-            p This post hasn't been published yet.
-else
-    .blog-post.col-lg-12.col-md-12(class=(!post.published ? 'blog-post-unpublished' : ''), data-meta=post)
-        h2.blog-post-title #{post.title}
-        p.blog-post-meta
-            span.date #{post._id.getTimestamp()}
-            | 
-            span.owner by #{post.owner.name.first} #{post.owner.name.last}
+if ((!user && post.published) || (user))
+    .post.styled(class=(!post.published ? 'unpublished' : ''), data-meta=(user ? post : ''))
+        h1.title #{post.title}
         div!= md(post.content)
+        span.meta
+            a(href="/post/" + post.slug)
+                time.date(datetime=(new Date(post._id.getTimestamp()).toISOString())) #{new Date(post._id.getTimestamp()).toISOString()}
+            | 
+            span.owner
+                | by
+                | 
+                a(href="/user/" + (Object.keys(post.owner.name).length ? post.owner.id : 'anonymous')) #{Object.keys(post.owner.name).length ? post.owner.name.first + ' ' + post.owner.name.last : (user ? post.owner.username : 'anonymous')}            
+else
+    .post.styled
+        p This post hasn't been published yet.

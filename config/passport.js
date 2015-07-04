@@ -1,10 +1,10 @@
-var bcrypt = require('bcrypt'),
-    mongoose = require('mongoose'),
-    LocalStrategy = require('passport-local').Strategy,
-    passport = require('passport'),
-    User  = require('../app/models/User');
-
-module.exports = (function() {
+exports = module.exports = function(app, passport) {
+    var bcrypt = require('bcrypt'),
+        mongoose = require('mongoose'),
+        LocalStrategy = require('passport-local').Strategy,
+        async = require('async'),
+        config = require('./config.js'),
+        User  = require('../app/models/User');
 
     passport.serializeUser(function(user, done) {
         done(null, user.id);
@@ -17,7 +17,9 @@ module.exports = (function() {
     });
 
     passport.use('local-signin', new LocalStrategy(function(username, password, done) {
-        User.findOne({ username: username }, function(err, user) {
+        // var criteria = (username.indexOf('@') === -1) ? {username: username} : {email: username};
+        // User.findOne(criteria, function(err, user) {
+        User.findOne({username: username}, function(err, user) {
             if (err) { return done(err); }
             if (!user) { return done(null, false, { message: 'Unknown user ' + username }); }
             user.comparePassword(password, function(err, isMatch) {
@@ -55,6 +57,4 @@ module.exports = (function() {
             });
         });
     }));
-
-    return passport;
-})();
+};

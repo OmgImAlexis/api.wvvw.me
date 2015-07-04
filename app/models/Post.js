@@ -1,14 +1,16 @@
 var mongoose = require('mongoose'),
+    config = require('../../config/config.js'),
     slug = require('mongoose-slug-unique');
 
 var postSchema = new mongoose.Schema({
     owner: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     published: { type: Boolean, required: true },
     title: { type: String, required: true },
-    date: { type: Date, required: true },
+    date: { type: Date },
     content: { type: String, required: true },
     slug: { type: String },
-    tags : { type : Array , "default" : [] }
+    tags : { type : Array , default : [] },
+    anonymous: { type: Boolean, default: config.db.anonDefault }
 });
 
 postSchema.index({ title: 'text', content: 'text', slug: 'text' });

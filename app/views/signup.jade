@@ -1,9 +1,13 @@
-form(action="/signup", method="post")
-    div
-        label Username: 
-        input(type="text", name="username")
-    div
-        label Password: 
-        input(type="password", name="password")
-    div
-        input(type="submit", value="Submit")
+extends ./layouts/main
+
+block content
+    .container
+        form(action="/signup", method="post").styled
+            div
+                label Username: 
+                input(type="text", name="username")
+            div
+                label Password: 
+                input(type="password", name="password")
+            div
+                input(type="submit", value="Submit")
