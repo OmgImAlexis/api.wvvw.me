@@ -7,7 +7,7 @@ html
         block styles
     body
         #header
-            form(action="/search", method="post")
+            form(action="/search", method="post", autocomplete="off")
                 input(type="text", placeholder="Search...", name="searchTerm")#globalSearch
             nav.nav
                 ul

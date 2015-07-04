@@ -5,13 +5,13 @@ block styles
 
 block beforeContent
     .controls
-        input(type="button", value="Add User", id="addUser").button
+        a(href="/admin/new/user").button Add User
         | 
-        input(type="button", value="User List", id="userList").button
-        | 
-        input(type="button", value="Post List", id="postList").button
+        a(href="/admin/users").button User List
         | 
         a(href="/admin/new/post").button New Post
+        | 
+        a(href="/admin/posts").button Post List
 
 block content
     .container

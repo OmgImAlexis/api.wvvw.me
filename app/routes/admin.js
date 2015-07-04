@@ -68,5 +68,19 @@ module.exports = (function() {
         }
     });
 
+    app.get('/users', function(req, res){
+        User.find({}).select('-__v -password').exec(function(err, users){
+            if(err) console.log(err);
+            res.send(users);
+        });
+    });
+
+    app.get('/posts', function(req, res){
+        Post.find({}).select('-__v').exec(function(err, posts){
+            if(err) console.log(err);
+            res.send(posts);
+        });
+    });
+
     return app;
 })();

@@ -110,3 +110,28 @@ nav.nav li a:hover {
     color: white;
     background-color: grey;
 }
+
+code {
+    padding: 0 2px;
+}
+
+pre {
+    padding: 10px;
+}
+
+pre code {
+    padding: 0;
+}
+
+pre, code {
+    background-color: rgb(41, 41, 41);
+    /* BEGIN word wrap */
+    /* Need all the following to word wrap instead of scroll box */
+    /* This will override the overflow:auto if present */
+    white-space: pre-wrap; /* css-3 */
+    white-space: -moz-pre-wrap !important; /* Mozilla, since 1999 */
+    white-space: -pre-wrap; /* Opera 4-6 */
+    white-space: -o-pre-wrap; /* Opera 7 */
+    word-wrap: break-word; /* Internet Explorer 5.5+ */
+    /* END word wrap */
+}
