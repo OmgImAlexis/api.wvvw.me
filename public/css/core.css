@@ -1,3 +1,13 @@
+/* http://www.paulirish.com/2012/box-sizing-border-box-ftw/ */
+html {
+    box-sizing: border-box;
+}
+
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+/* My CSS */
 body {
     background-color: #292929;
     color: #dfdfdf;
@@ -85,7 +95,7 @@ h1.title, h2.title {
     left: 100px;
     width: 500px;
     padding: 5px;
-    height: 35px;
+    height: 45px;
     border: 0;
     background-color: rgb(51, 51, 51);
     color: white;
