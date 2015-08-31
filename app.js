@@ -29,6 +29,8 @@ fs.exists('./config/config.js', function(exists) {
 
         var app = express();
 
+        app.disable('x-powered-by');
+
         app.set('views', __dirname + '/app/views');
         app.set('view engine', 'jade');
         app.use(express.static(__dirname + '/public'));
