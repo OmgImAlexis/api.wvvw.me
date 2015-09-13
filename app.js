@@ -12,6 +12,7 @@ fs.exists('./config/config.js', function(exists) {
             session = require('express-session'),
             MongoStore = require('connect-mongo')(session),
             logger = require('express-logger'),
+            compression = require('compression'),
             mongoose = require('mongoose'),
             passport = require('passport'),
             config = require('./config/config.js'),
@@ -33,8 +34,8 @@ fs.exists('./config/config.js', function(exists) {
 
         app.set('views', __dirname + '/app/views');
         app.set('view engine', 'jade');
-        app.use(express.static(__dirname + '/public'));
-        app.use(logger({path: './log.txt'}));
+        app.use(compression());
+        app.use(express.static(__dirname + '/public', { maxAge: 86400000 }));
         app.use(cookieParser());
         app.use(bodyParser.urlencoded({
             extended: true
@@ -81,12 +82,6 @@ fs.exists('./config/config.js', function(exists) {
                 error: error
             });
         });
-
-        if(config.emptyLog){
-            fs.writeFile('./log.txt', '', function(){
-                console.log('Log file emptied.');
-            });
-        }
 
         app.listen(config.env.port, function() {
             console.log('The server is running on port %s', config.env.port);
