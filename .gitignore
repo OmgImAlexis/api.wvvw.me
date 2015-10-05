@@ -53,3 +53,7 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# Bower
+bower_components
+gui/**/_bower.js
