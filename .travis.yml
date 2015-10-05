@@ -1,6 +1,12 @@
+sudo: false
+env:
+  - CXX=g++-4.8
 language: node_js
-node_js: 4.1
 services: mongodb
-before_install:
-  - sudo apt-get update -qq
-  - sudo apt-get install -y libkrb5-dev
+node_js:
+  - "4.1"
+addons:
+  apt:
+    packages:
+    - gcc-4.8
+    - g++-4.8
