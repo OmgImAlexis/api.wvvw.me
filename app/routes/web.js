@@ -28,7 +28,7 @@ module.exports = (function() {
                     posts[i].content = converter.makeHtml(posts[i].content);
                     finished();
                 }
-                function doContinue() {
+                var doContinue = function () {
                     res.render('index', {
                         posts: posts,
                         md: md
@@ -51,7 +51,7 @@ module.exports = (function() {
                 posts[i].content = converter.makeHtml(posts[i].content);
                 finished();
             }
-            function doContinue() {
+            var doContinue =  function() {
                 res.render('index', {
                     posts: posts,
                     md: md
@@ -85,7 +85,7 @@ module.exports = (function() {
                     posts[i].content = converter.makeHtml(posts[i].content);
                     finished();
                 }
-                function doContinue() {
+                var doContinue = function() {
                     res.render('index', {
                         posts: posts,
                         md: md
@@ -94,7 +94,7 @@ module.exports = (function() {
             } else {
                 res.render('http/genericError', {
                     error: 'We couldn\'t find any posts with that search term.'
-                })
+                });
             }
         });
     });
@@ -105,7 +105,7 @@ module.exports = (function() {
         User.findOne(criteria).select('-password -__v').exec(function(err, user){
             if(err) console.log(err);
             res.render('user', {
-                user
+                user: user
             });
         });
     });
