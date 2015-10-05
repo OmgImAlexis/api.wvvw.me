@@ -1,0 +1,26 @@
+{
+  "name": "wvvw.me",
+  "version": "1.0.0",
+  "homepage": "https://github.com/OmgImAlexis/wvvw.me",
+  "authors": [
+    "Alexis Tyler <xo@wvvw.me>"
+  ],
+  "description": "wvvw.me website",
+  "main": "app.js",
+  "moduleType": [
+    "node"
+  ],
+  "license": "DBAD",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4",
+    "jquery-timeago": "~1.4.3"
+  }
+}
