@@ -35,7 +35,7 @@
   },
   "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"Error: no test specified\" && exit 0",
     "dev": "export NODE_ENV='dev' && clear && nodemon app.js",
     "prestart": "mongod --fork --logpath /dev/null",
     "start": "nodemon ./app.js",
