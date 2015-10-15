@@ -25,6 +25,17 @@ module.exports = function(grunt) {
                     // './public/js/_bower.min.css': ['./_bower.css']
                 }
             }
+        },
+        cssmin: {
+            options: {
+                shorthandCompacting: false,
+                roundingPrecision: -1
+            },
+            target: {
+                files: {
+                    './public/js/core.min.css': ['./public/css/core.css']
+                }
+            }
         }
     });
 
@@ -32,6 +43,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
 
-    grunt.registerTask('default', ['bower_concat', 'uglify']);
+    grunt.registerTask('default', ['bower_concat', 'uglify', 'cssmin']);
 
 };
