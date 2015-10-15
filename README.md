@@ -1,4 +1,4 @@
-## wvvw.me
+## wvvw.me [![Build Status](https://travis-ci.org/OmgImAlexis/wvvw.me.svg)](https://travis-ci.org/OmgImAlexis/wvvw.me) [![Coverage Status](https://coveralls.io/repos/OmgImAlexis/wvvw.me/badge.svg?branch=master&service=github)](https://coveralls.io/github/OmgImAlexis/wvvw.me?branch=master)
 
 ##### If you've like to add something please just submit an issue.
 

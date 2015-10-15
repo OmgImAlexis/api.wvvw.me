@@ -5,14 +5,13 @@
   "authors": [
     "Alexis Tyler <xo@wvvw.me>"
   ],
-  "description": "wvvw.me",
+  "description": "wvvw.me website",
   "main": "app.js",
-  "moduleType": [],
-  "keywords": [
-    "cms",
-    "blog"
+  "moduleType": [
+      "cms",
+      "blog"
   ],
-  "license": "MIT",
+  "license": "DBAD",
   "private": true,
   "ignore": [
     "**/.*",

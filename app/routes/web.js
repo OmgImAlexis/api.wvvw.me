@@ -23,17 +23,16 @@ module.exports = (function() {
             if(posts.length){
                 var Showdown = require('showdown');
                 var converter = new Showdown.converter();
-                var finished = _.after(posts.length, doContinue);
-                for(i = 0; i < posts.length; i++) {
-                    posts[i].content = converter.makeHtml(posts[i].content);
-                    finished();
-                }
-                function doContinue() {
+                var finished = _.after(posts.length, function(){
                     res.render('index', {
                         posts: posts,
                         md: md
                     });
-                };
+                });
+                for(i = 0; i < posts.length; i++) {
+                    posts[i].content = converter.makeHtml(posts[i].content);
+                    finished();
+                }
             } else {
                 res.render('index', {
                     posts: []
@@ -46,17 +45,16 @@ module.exports = (function() {
         Post.find({tags: req.params.tag}).populate('owner').sort({'_id': -1}).limit(10).exec(function(err, posts) {
             var Showdown = require('showdown');
             var converter = new Showdown.converter();
-            var finished = _.after(posts.length, doContinue);
-            for(i = 0; i < posts.length; i++) {
-                posts[i].content = converter.makeHtml(posts[i].content);
-                finished();
-            }
-            function doContinue() {
+            var finished = _.after(posts.length, function(){
                 res.render('index', {
                     posts: posts,
                     md: md
                 });
-            };
+            });
+            for(i = 0; i < posts.length; i++) {
+                posts[i].content = converter.makeHtml(posts[i].content);
+                finished();
+            }
         });
     });
 
@@ -80,21 +78,20 @@ module.exports = (function() {
             if(posts.length){
                 var Showdown = require('showdown');
                 var converter = new Showdown.converter();
-                var finished = _.after(posts.length, doContinue);
-                for(i = 0; i < posts.length; i++) {
-                    posts[i].content = converter.makeHtml(posts[i].content);
-                    finished();
-                }
-                function doContinue() {
+                var finished = _.after(posts.length, function(){
                     res.render('index', {
                         posts: posts,
                         md: md
                     });
-                };
+                });
+                for(i = 0; i < posts.length; i++) {
+                    posts[i].content = converter.makeHtml(posts[i].content);
+                    finished();
+                }
             } else {
                 res.render('http/genericError', {
                     error: 'We couldn\'t find any posts with that search term.'
-                })
+                });
             }
         });
     });
@@ -105,7 +102,7 @@ module.exports = (function() {
         User.findOne(criteria).select('-password -__v').exec(function(err, user){
             if(err) console.log(err);
             res.render('user', {
-                user
+                user: user
             });
         });
     });
