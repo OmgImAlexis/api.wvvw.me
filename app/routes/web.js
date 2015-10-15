@@ -20,41 +20,19 @@ module.exports = (function() {
         var criteria = req.user ? {} : {published: true};
         Post.find(criteria).populate('owner').sort({'_id': -1}).limit(10).exec(function(err, posts) {
             if(err) console.log(err);
-            if(posts.length){
-                var Showdown = require('showdown');
-                var converter = new Showdown.converter();
-                var finished = _.after(posts.length, function(){
-                    res.render('index', {
-                        posts: posts,
-                        md: md
-                    });
-                });
-                for(i = 0; i < posts.length; i++) {
-                    posts[i].content = converter.makeHtml(posts[i].content);
-                    finished();
-                }
-            } else {
-                res.render('index', {
-                    posts: []
-                });
-            }
+            res.render('index', {
+                posts: (posts.length) ? posts : [],
+                md: md
+            });
         });
     });
 
     app.get('/tagged/:tag', function(req, res){
         Post.find({tags: req.params.tag}).populate('owner').sort({'_id': -1}).limit(10).exec(function(err, posts) {
-            var Showdown = require('showdown');
-            var converter = new Showdown.converter();
-            var finished = _.after(posts.length, function(){
-                res.render('index', {
-                    posts: posts,
-                    md: md
-                });
+            res.render('index', {
+                posts: (posts.length) ? posts : [],
+                md: md
             });
-            for(i = 0; i < posts.length; i++) {
-                posts[i].content = converter.makeHtml(posts[i].content);
-                finished();
-            }
         });
     });
 
