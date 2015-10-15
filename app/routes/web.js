@@ -77,6 +77,15 @@ module.exports = (function() {
         });
     });
 
+    app.get('/todo', function(req, res){
+        Post.find({ published: false }).select('title').exec(function(err, posts){
+            if(err) console.log(err);
+            res.send({
+                todo: posts
+            });
+        });
+    });
+
     app.get('/*', function (req, res, next) {
         var url = req.url.replace(/^\/|\/$/g, '').split("/");
         var base = url[0];

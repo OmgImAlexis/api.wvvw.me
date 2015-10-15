@@ -68,17 +68,17 @@ fs.exists('./config/config.js', function(exists) {
 
         // Handle 404
         app.use(function(req, res) {
-            res.status(400);
+            res.status(404);
             res.render('http/404', {
-                title: '404: File Not Found'}
-            );
+                title: '404: File Not Found'
+            });
         });
 
         // Handle 500
         app.use(function(error, req, res, next) {
             res.status(500);
             res.render('http/500', {
-                title:'500: Internal Server Error',
+                title: '500: Internal Server Error',
                 error: error
             });
         });
