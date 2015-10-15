@@ -1,0 +1,30 @@
+{
+  "name": "wvvw.me",
+  "version": "1.0.0",
+  "homepage": "https://github.com/OmgImAlexis/wvvw.me",
+  "authors": [
+    "Alexis Tyler <xo@wvvw.me>"
+  ],
+  "description": "wvvw.me",
+  "main": "app.js",
+  "moduleType": [],
+  "keywords": [
+    "cms",
+    "blog"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4",
+    "underscore": "~1.8.3",
+    "jquery-timeago": "~1.4.3",
+    "EpicEditor": "~0.2.3"
+  }
+}
