@@ -3,7 +3,7 @@ html
     head
         title= title ? title : 'wvvw.me'
         meta(name="viewport", content="width=device-width, initial-scale=1")
-        link(href="/css/core.min.css", rel="stylesheet", type="text/css")
+        link(href="https://cdn.wvvw.me/css/core.min.css", rel="stylesheet", type="text/css")
         block styles
     body
         #header
@@ -24,7 +24,7 @@ html
         block beforeContent
         #main
             block content
-        script(src="/js/_bower.min.js")
+        script(src="https://cdn.wvvw.me/js/_bower.min.js")
         script.
             $(document).ready(function() {
                 $("[datetime]").timeago();
