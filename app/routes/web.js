@@ -76,18 +76,10 @@ module.exports = (function() {
         }).exec(function(err, posts) {
             if (err) console.log(err);
             if(posts.length){
-                var Showdown = require('showdown');
-                var converter = new Showdown.converter();
-                var finished = _.after(posts.length, function(){
-                    res.render('index', {
-                        posts: posts,
-                        md: md
-                    });
+                res.render('index', {
+                    posts: posts,
+                    md: md
                 });
-                for(i = 0; i < posts.length; i++) {
-                    posts[i].content = converter.makeHtml(posts[i].content);
-                    finished();
-                }
             } else {
                 res.render('http/genericError', {
                     error: 'We couldn\'t find any posts with that search term.'
