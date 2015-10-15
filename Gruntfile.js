@@ -33,7 +33,7 @@ module.exports = function(grunt) {
             },
             target: {
                 files: {
-                    './public/js/core.min.css': ['./public/css/core.css']
+                    './public/css/core.min.css': ['./public/css/core.css']
                 }
             }
         }
