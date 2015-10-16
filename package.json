@@ -35,7 +35,7 @@
   },
   "private": true,
   "scripts": {
-    "test": "npm install && grunt jshint",
+    "test": "npm install && npm install -g grunt-cli && grunt jshint",
     "dev": "export NODE_ENV='dev' && clear && nodemon app.js",
     "prestart": "mongod --fork --logpath /dev/null",
     "start": "nodemon ./app.js",
