@@ -11,13 +11,10 @@ fs.exists('./config/config.js', function(exists) {
             methodOverride = require('method-override'),
             session = require('express-session'),
             MongoStore = require('connect-mongo')(session),
-            logger = require('express-logger'),
             compression = require('compression'),
             mongoose = require('mongoose'),
             passport = require('passport'),
-            config = require('./config/config.js'),
-            User = require('./app/models/User'),
-            Post = require('./app/models/Post');
+            config = require('./config/config.js');
 
         mongoose.connect(config.db.uri, function(err){
             if(err){
@@ -75,7 +72,7 @@ fs.exists('./config/config.js', function(exists) {
         });
 
         // Handle 500
-        app.use(function(error, req, res, next) {
+        app.use(function(error, req, res) {
             res.status(500);
             res.render('http/500', {
                 title: '500: Internal Server Error',

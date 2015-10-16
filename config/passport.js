@@ -1,11 +1,7 @@
-exports = module.exports = function(app, passport) {
-    var bcrypt = require('bcrypt'),
-        mongoose = require('mongoose'),
-        LocalStrategy = require('passport-local').Strategy,
-        async = require('async'),
-        config = require('./config.js'),
-        User  = require('../app/models/User');
+var LocalStrategy = require('passport-local').Strategy,
+    User  = require('../app/models/User');
 
+exports = module.exports = function(app, passport) {
     passport.serializeUser(function(user, done) {
         done(null, user.id);
     });
@@ -23,7 +19,7 @@ exports = module.exports = function(app, passport) {
             if (err) { return done(err); }
             if (!user) { return done(null, false, { message: 'Unknown user ' + username }); }
             user.comparePassword(password, function(err, isMatch) {
-                if (err) return done(err);
+                if (err) { return done(err); }
                 if(isMatch) {
                     return done(null, user);
                 } else {
@@ -41,7 +37,7 @@ exports = module.exports = function(app, passport) {
     function(req, username, password, done) {
         process.nextTick(function() {
             User.findOne({username: username}, function(err, user) {
-                if (err) return done(err);
+                if (err) { return done(err); }
                 if (user) {
                     return done(null, false, { message: 'That username is already taken.' });
                 } else {
@@ -50,7 +46,7 @@ exports = module.exports = function(app, passport) {
                         password: password
                     });
                     user.save(function(err, user) {
-                        if (err) throw err;
+                        if (err) { throw err; }
                         return done(null, user);
                     });
                 }

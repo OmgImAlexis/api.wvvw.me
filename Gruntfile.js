@@ -36,12 +36,20 @@ module.exports = function(grunt) {
                     './public/css/core.min.css': ['./public/css/core.css']
                 }
             }
+        },
+        jshint: {
+            options: {
+                // curly: true,
+                eqeqeq: true
+            },
+            uses_defaults: ['app.js', 'app/**/*.js', 'config/**/*.js']
         }
     });
 
     grunt.loadNpmTasks('grunt-bower-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
+    grunt.loadNpmTasks('grunt-contrib-jshint');
 
     grunt.registerTask('default', ['bower_concat', 'uglify', 'cssmin']);
 

@@ -1,6 +1,4 @@
 var express  = require('express'),
-    bcrypt = require('bcrypt'),
-    mongoose = require('mongoose'),
     passport = require('passport');
 
 module.exports = (function() {

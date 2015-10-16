@@ -1,6 +1,5 @@
 var mongoose = require('mongoose'),
-    config = require('../../config/config.js'),
-    slug = require('mongoose-slug-unique');
+    config = require('../../config/config.js');
 
 var postSchema = new mongoose.Schema({
     owner: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },

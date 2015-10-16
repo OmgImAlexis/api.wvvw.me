@@ -1,5 +1,4 @@
 var express  = require('express'),
-    _ = require('underscore'),
     Post = require('../models/Post'),
     User = require('../models/User');
 
@@ -7,10 +6,12 @@ module.exports = (function() {
     var app = express.Router();
 
     app.get('*', function(req, res, next) {
-        if(!req.isAuthenticated()) res.redirect('/signin');
-        if(!req.user.isAdmin) res.render('http/304', {
-            error: 'You\'re not an admin!'
-        });
+        if(!req.isAuthenticated()) { res.redirect('/signin'); }
+        if(!req.user.isAdmin){
+            res.render('http/304', {
+                error: 'You\'re not an admin!'
+            });
+        }
         return next();
     });
 
@@ -21,9 +22,9 @@ module.exports = (function() {
     app.get('/new/*', function(req, res){
         var url = req.url.replace(/^\/|\/$/g, '').split("/");
         var base = url[1];
-        if(base == 'post') {
+        if(base === 'post') {
             res.render('admin/new/post');
-        } else if(base == 'page'){
+        } else if(base === 'page'){
             res.render('admin/new/page');
         } else {
             res.render('http/500', {
@@ -35,12 +36,12 @@ module.exports = (function() {
     app.post('/new/*', function(req, res){
         var url = req.url.replace(/^\/|\/$/g, '').split("/");
         var base = url[1];
-        if(base == 'post') {
-            var published = req.body.published == 'on' ? true : false,
+        if(base === 'post') {
+            var published = req.body.published === 'on' ? true : false,
                 title = req.body.title,
                 content = req.body.content,
                 tags = req.body.tags.replace(/^\s*|\s*$/g,'').split(/\s*,\s*/),
-                anonymous = req.body.anonymous == 'on' ? true : false;
+                anonymous = req.body.anonymous === 'on' ? true : false;
 
             var post = new Post({
                 owner: req.user.id,
@@ -59,7 +60,7 @@ module.exports = (function() {
                     res.redirect('/post/' + post.slug);
                 }
             });
-        } else if(base == 'page'){
+        } else if(base === 'page'){
             res.render('admin/new/page');
         } else {
             res.render('http/500', {
@@ -70,14 +71,14 @@ module.exports = (function() {
 
     app.get('/users', function(req, res){
         User.find({}).select('-__v -password').exec(function(err, users){
-            if(err) console.log(err);
+            if(err) { console.log(err); }
             res.send(users);
         });
     });
 
     app.get('/posts', function(req, res){
         Post.find({}).select('-__v').exec(function(err, posts){
-            if(err) console.log(err);
+            if(err) { console.log(err); }
             res.send(posts);
         });
     });
