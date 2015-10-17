@@ -2,7 +2,8 @@ var mongoose = require('mongoose');
 
 var commentSchema = new mongoose.Schema({
     owner: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    date: { type: Date, required: true },
+    postId: { type: mongoose.Schema.Types.ObjectId, ref: 'Post', required: true },
+    date: { type: Date },
     content: { type: String, required: true }
 });
 

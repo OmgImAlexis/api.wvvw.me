@@ -3,7 +3,10 @@ html
     head
         title= title ? title : '\u180E'
         meta(name="viewport", content="width=device-width, initial-scale=1")
-        link(href="https://cdn.wvvw.me/css/core.min.css", rel="stylesheet", type="text/css")
+        if(process.env.wvvw_environment == 'dev')
+            link(href="/css/core.min.css", rel="stylesheet", type="text/css")
+        else
+            link(href="https://cdn.wvvw.me/css/core.min.css", rel="stylesheet", type="text/css")
         block styles
     body
         #header

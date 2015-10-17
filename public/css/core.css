@@ -43,7 +43,7 @@ img {
 
 .container {
     max-width: 900px;
-    margin: 0 auto;
+    margin: 0 auto 20px auto;
 }
 .styled {
     background-color: #333;
@@ -144,4 +144,8 @@ pre, code {
     white-space: -o-pre-wrap; /* Opera 7 */
     word-wrap: break-word; /* Internet Explorer 5.5+ */
     /* END word wrap */
+}
+
+.comment .content p {
+    margin-top: 0;
 }

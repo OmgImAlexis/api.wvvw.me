@@ -9,6 +9,7 @@ var postSchema = new mongoose.Schema({
     content: { type: String, required: true },
     slug: { type: String },
     tags : { type : Array , default : [] },
+    commentsEnabled: { type: Boolean, required: true, default: true },
     anonymous: { type: Boolean, default: config.db.anonDefault }
 });
 

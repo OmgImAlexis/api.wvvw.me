@@ -3,7 +3,8 @@ var express  = require('express'),
     config = require('../../config/config.js'),
     Post = require('../models/Post'),
     Page = require('../models/Page'),
-    User = require('../models/User');
+    User = require('../models/User'),
+    Comment = require('../models/Comment');
 
 module.exports = (function() {
     var app = express.Router();
@@ -76,6 +77,26 @@ module.exports = (function() {
         });
     });
 
+    app.post('/new/comment', function(req, res){
+        var comment = new Comment({
+            owner: req.user.id,
+            postId: req.body.postId,
+            content: req.body.comment
+        });
+        comment.save(function(err, comment){
+            if(err) {
+                res.render('http/genericError', {
+                    error: err
+                });
+            } else {
+                Post.findOne({_id: req.body.postId}).exec(function(err, post){
+                    if(err) { console.log(err); }
+                    res.redirect('/post/' + post.slug + '#' + comment.id);
+                });
+            }
+        });
+    });
+
     app.get('/todo', function(req, res){
         Post.find({ published: false }).select('title').exec(function(err, posts){
             if(err) { console.log(err); }
@@ -93,9 +114,13 @@ module.exports = (function() {
             Post.findOne({slug: slug}).populate('owner').exec(function(err, post) {
                 if(err) { console.log(err); }
                 if (post) {
-                    res.render('post', {
-                        post: post,
-                        md: md
+                    Comment.find({postId: post.id}).populate('owner').limit(50).exec(function(err, comments){
+                        if(err) { console.log(err); }
+                        res.render('post', {
+                            post: post,
+                            comments: comments,
+                            md: md
+                        });
                     });
                 } else {
                     next();
