@@ -146,6 +146,33 @@ pre, code {
     /* END word wrap */
 }
 
+/* https://perishablepress.com/perfect-pre-tags/ */
+code, samp, kbd {
+    text-align: left;
+    color: #8C8C8C;
+}
+pre code {
+    font-size: 11px;
+}
+pre {
+    padding: 0.1em 0.5em 0.3em 0.7em;
+    border-left: 11px solid #ccc;
+    overflow: auto;
+}
+/* target IE7 and IE6 */
+*:first-child+html pre {
+    padding-bottom: 2em;
+    overflow-y: hidden;
+    overflow: visible;
+    overflow-x: auto;
+}
+* html pre {
+    padding-bottom: 2em;
+    overflow: visible;
+    overflow-x: auto;
+}
+/* https://perishablepress.com/perfect-pre-tags/ */
+
 .comment .content p {
     margin-top: 0;
 }
