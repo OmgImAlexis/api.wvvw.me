@@ -30,4 +30,19 @@ postSchema.pre('save', function (next) {
     next();
 });
 
+postSchema.virtual('permalink').get(function () {
+    var format = nconf.get('permalink:format');
+    var date = new Date(this._id.getTimestamp());
+    return format
+        .replace('%slug%', this.slug)
+        .replace('%postId%', this._id)
+        // .replace('%author%', slugify(this.owner.name))
+        .replace('%year%', date.getFullYear())
+        .replace('%month%', ('0' + date.getMonth()).slice(-2))
+        .replace('%day%', ('0' + date.getDate()).slice(-2))
+        .replace('%hour%', ('0' + date.getHours()).slice(-2))
+        .replace('%minute%', ('0' + date.getMinutes()).slice(-2))
+        .replace('%second%', ('0' + date.getSeconds()).slice(-2));
+});
+
 module.exports = mongoose.model('Post', postSchema);

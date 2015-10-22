@@ -107,11 +107,13 @@ module.exports = (function() {
     });
 
     app.get('/*', function (req, res, next) {
-        var url = req.url.replace(/^\/|\/$/g, '').split("/");
-        var base = url[0];
-        var slug = url.slice(1).join('/');
-        if (base === 'post') {
-            Post.findOne({slug: slug}).populate('owner').exec(function(err, post) {
+        var url = (req.url.charAt(0) === '/' ? req.url.substr(1) : req.url).split('/');
+        var format = nconf.get('permalink:format').substr(1).substr(0, nconf.get('permalink:format').substr(1).length-1).split('/');
+        var slug = url[format.indexOf('%slug%')];
+        var postId = url[format.indexOf('%postId%')];
+        if(slug || postId) {
+            var criteria = slug && postId ? {slug: slug, _id: postId} : slug ? {slug: slug} : {_id: postId};
+            Post.findOne(criteria).populate('owner permalink').exec(function(err, post){
                 if(err) { console.log(err); }
                 if (post) {
                     Comment.find({postId: post.id}).populate('owner').limit(50).exec(function(err, comments){

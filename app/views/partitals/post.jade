@@ -3,14 +3,14 @@ if ((!user && post.published) || (user))
         h1.title #{post.title}
         .content!= md(post.content)
         span.meta
-            a(href="/post/" + post.slug)
+            a(href=post.permalink)
                 time.date(datetime=(new Date(post.date).toISOString())) #{new Date(post.date).toISOString()}
             | 
             span.owner
                 | by
                 | 
                 a(href="/user/" + (Object.keys(post.owner.name).length ? post.owner.id : 'anonymous')) #{Object.keys(post.owner.name).length ? post.owner.name.first + ' ' + post.owner.name.last : (user ? post.owner.username : 'anonymous')}            
-    if(layout.currentPage.replace('/', '').split('/')[0] == 'post')
+    if(!layout.currentPage.replace('/', '').split('/')[0] === '')
         if(post.commentsEnabled)
             if(user)
                 .commentBox.styled
