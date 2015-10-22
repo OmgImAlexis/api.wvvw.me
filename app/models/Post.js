@@ -1,5 +1,5 @@
 var mongoose = require('mongoose'),
-    config = require('../../config/config.js');
+    nconf = require('nconf');
 
 var postSchema = new mongoose.Schema({
     owner: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
@@ -10,7 +10,7 @@ var postSchema = new mongoose.Schema({
     slug: { type: String },
     tags : { type : Array , default : [] },
     commentsEnabled: { type: Boolean, required: true, default: true },
-    anonymous: { type: Boolean, default: config.db.anonDefault }
+    anonymous: { type: Boolean, default: nconf.get('anon').default }
 });
 
 postSchema.index({ title: 'text', content: 'text', slug: 'text' });

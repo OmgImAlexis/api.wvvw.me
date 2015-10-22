@@ -1,6 +1,6 @@
 var express  = require('express'),
+    nconf = require('nconf'),
     md = require('marked'),
-    config = require('../../config/config.js'),
     Post = require('../models/Post'),
     Page = require('../models/Page'),
     User = require('../models/User'),
@@ -68,7 +68,7 @@ module.exports = (function() {
 
     app.get('/user/:userId', function(req, res){
         var userId = req.params.userId;
-        var criteria = userId === 'anonymous' ? {_id: config.db.anonUserId} : {_id: userId};
+        var criteria = userId === 'anonymous' ? {_id: nconf.get('anon').userId} : {_id: userId};
         User.findOne(criteria).select('-password -__v').exec(function(err, user){
             if(err) { console.log(err); }
             res.render('user', {
