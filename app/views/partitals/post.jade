@@ -10,7 +10,7 @@ if ((!user && post.published) || (user))
                 | by
                 | 
                 a(href="/user/" + (Object.keys(post.owner.name).length ? post.owner.id : 'anonymous')) #{Object.keys(post.owner.name).length ? post.owner.name.first + ' ' + post.owner.name.last : (user ? post.owner.username : 'anonymous')}            
-    if(!layout.currentPage.replace('/', '').split('/')[0] === '')
+    if(layout.currentPage.replace('/', '').split('/')[0] != '')
         if(post.commentsEnabled)
             if(user)
                 .commentBox.styled
