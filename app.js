@@ -9,6 +9,8 @@ var express = require('express'),
     passport = require('passport'),
     nconf = require('nconf');
 
+nconf.use('memory');
+
 nconf.argv().env().file({ file: './config.json' });
 
 mongoose.connect('mongodb://' + nconf.get('database:host') + ':' + nconf.get('database:port') + '/' + nconf.get('database:collection'), function(err){

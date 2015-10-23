@@ -176,3 +176,9 @@ pre {
 .comment .content p {
     margin-top: 0;
 }
+
+@media (max-width: 920px) {
+    #header form {
+        display: none;
+    }
+}
