@@ -10,7 +10,7 @@ var postSchema = new mongoose.Schema({
     slug: { type: String },
     tags : { type : Array , default : [] },
     commentsEnabled: { type: Boolean, required: true, default: true },
-    anonymous: { type: Boolean, default: nconf.get('anon').default }
+    anonymous: { type: Boolean, default: nconf.get('anon:default') }
 });
 
 postSchema.index({ title: 'text', content: 'text', slug: 'text' });
