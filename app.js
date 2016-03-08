@@ -7,15 +7,35 @@ var express = require('express'),
     compression = require('compression'),
     mongoose = require('mongoose'),
     passport = require('passport'),
-    nconf = require('nconf');
+    path = require('path'),
+    config = require('cz');
 
-nconf.use('memory');
-
-nconf.argv().env().file({ file: './config.json' });
-
-mongoose.connect('mongodb://' + nconf.get('database:host') + ':' + nconf.get('database:port') + '/' + nconf.get('database:collection'), function(err){
-    if(err){ console.log('Cannot connect to mongodb, please check your config.json'); process.exit(1); }
+config.defaults({
+    "db":{
+        "host": "mongodb",
+        "port": 27017,
+        "collection": "wvvw_me"
+    },
+    "session": {
+        "secret": "adsknasljdnlj3nj4n23jnql"
+    },
+    "web": {
+        "port": 3000
+    },
+    "anon": {
+        "userId": "559804077d6a168bad287d9b",
+        "default": false
+    },
+    "permalink": {
+        "format": "/post/%slug%/"
+    }
 });
+
+config.load(path.normalize(__dirname + '/config.json'));
+config.args();
+config.store('disk');
+
+mongoose.connect('mongodb://' + config.joinGets(['db:host', 'db:port', 'db:collection'], [':', '/']));
 
 var app = express();
 
@@ -32,7 +52,7 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 app.use(methodOverride());
 app.use(session({
-    secret: nconf.get('session:secret'),
+    secret: config.get('session:secret'),
     name: 'session',
     store: new MongoStore({mongooseConnection: mongoose.connection}),
     proxy: true,
@@ -72,6 +92,6 @@ app.use(function(error, req, res) {
     });
 });
 
-app.listen(nconf.get('web:port'), function() {
-    console.log('The server is running on port %s', nconf.get('web:port'));
+app.listen(config.get('web:port'), function() {
+    console.log('The server is running on port %s', config.get('web:port'));
 });

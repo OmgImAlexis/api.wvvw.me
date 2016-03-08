@@ -1,10 +1,15 @@
 var express  = require('express'),
-    nconf = require('nconf'),
     md = require('marked'),
+    path = require('path'),
+    config = require('cz'),
     Post = require('../models/Post'),
     Page = require('../models/Page'),
     User = require('../models/User'),
     Comment = require('../models/Comment');
+
+config.load(path.normalize(__dirname + '/../../config.json'));
+config.args();
+config.store('disk');
 
 module.exports = (function() {
     var app = express.Router();
@@ -68,7 +73,7 @@ module.exports = (function() {
 
     app.get('/user/:userId', function(req, res){
         var userId = req.params.userId;
-        var criteria = userId === 'anonymous' ? {_id: nconf.get('anon').userId} : {_id: userId};
+        var criteria = userId === 'anonymous' ? {_id: config.get('anon').userId} : {_id: userId};
         User.findOne(criteria).select('-password -__v').exec(function(err, user){
             if(err) { console.log(err); }
             res.render('user', {
@@ -108,7 +113,7 @@ module.exports = (function() {
 
     app.get('/*', function (req, res, next) {
         var url = (req.url.charAt(0) === '/' ? req.url.substr(1) : req.url).split('/');
-        var format = nconf.get('permalink:format').substr(1).substr(0, nconf.get('permalink:format').substr(1).length-1).split('/');
+        var format = config.get('permalink:format').substr(1).substr(0, config.get('permalink:format').substr(1).length-1).split('/');
         var slug = url[format.indexOf('%slug%')];
         var postId = url[format.indexOf('%postId%')];
         if(slug || postId) {

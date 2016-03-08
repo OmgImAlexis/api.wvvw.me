@@ -1,5 +1,10 @@
 var mongoose = require('mongoose'),
-    nconf = require('nconf');
+    path = require('path'),
+    config = require('cz');
+
+config.load(path.normalize(__dirname + '/../../config.json'));
+config.args();
+config.store('disk');
 
 var postSchema = new mongoose.Schema({
     owner: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
@@ -10,7 +15,7 @@ var postSchema = new mongoose.Schema({
     slug: { type: String },
     tags : { type : Array , default : [] },
     commentsEnabled: { type: Boolean, required: true, default: true },
-    anonymous: { type: Boolean, default: nconf.get('anon:default') }
+    anonymous: { type: Boolean, default: config.get('anon:default') }
 });
 
 postSchema.index({ title: 'text', content: 'text', slug: 'text' });
@@ -31,7 +36,7 @@ postSchema.pre('save', function (next) {
 });
 
 postSchema.virtual('permalink').get(function () {
-    var format = nconf.get('permalink:format');
+    var format = config.get('permalink:format');
     var date = new Date(this._id.getTimestamp());
     return format
         .replace('%slug%', this.slug)

@@ -6,9 +6,9 @@ module.exports = (function() {
     var app = express.Router();
 
     app.get('*', function(req, res, next) {
-        if(!req.isAuthenticated()) { res.redirect('/signin'); }
-        if(!req.user.isAdmin){
-            res.render('http/304', {
+        if(!req.isAuthenticated()) { return res.redirect('/signin'); }
+        if(req.user.isAdmin !== 'undefined'){
+            return res.render('http/304', {
                 error: 'You\'re not an admin!'
             });
         }
