@@ -13,7 +13,7 @@ RUN apt-get update \
 
 # Install Node.js
 RUN wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.31.0/install.sh | bash \
-    && ~/.nvm/nvm.sh \
+    && source /root/.bashrc \
     && nvm install 5 \
     && nvm alias default 5 \
     && nvm use default
