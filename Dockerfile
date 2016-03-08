@@ -7,10 +7,12 @@ MAINTAINER OmgImAlexis
 # Replace shell with bash so we can source files
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
-# Install Node.js and other dependencies
+# Install apt-get dependencies
 RUN apt-get update \
-    && apt-get -y install python build-essential wget \
-    && wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.31.0/install.sh | bash \
+    && apt-get -y install python build-essential wget
+
+# Install Node.js
+RUN wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.31.0/install.sh | bash \
     && ~/.nvm/nvm.sh \
     && nvm install 5 \
     && nvm alias default 5 \
