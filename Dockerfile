@@ -11,7 +11,7 @@ RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 RUN apt-get update \
     && apt-get -y install python build-essential wget \
     && wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.31.0/install.sh | bash \
-    && source /usr/local/nvm/nvm.sh \
+    && ~/.nvm/nvm.sh \
     && nvm install 5 \
     && nvm alias default 5 \
     && nvm use default
