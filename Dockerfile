@@ -8,22 +8,18 @@ MAINTAINER OmgImAlexis
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
 # Install apt-get dependencies
-RUN apt-get update \
-    && apt-get -y install python build-essential wget
+RUN apt-get update && apt-get -y install python build-essential wget
 
-# Install Node.js
-RUN wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.31.0/install.sh | bash \
-    && source /root/.bashrc \
-    && nvm install 5 \
-    && nvm alias default 5 \
-    && nvm use default
-
-# Install nodemon
-RUN npm install -g nodemon
+RUN wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.31.0/install.sh | bash
+ENV NVM_DIR=/root/.nvm
+ENV SHIPPABLE_NODE_VERSION=v5
+RUN . $HOME/.nvm/nvm.sh && nvm install $SHIPPABLE_NODE_VERSION && nvm alias default $SHIPPABLE_NODE_VERSION && nvm use default \
+    && npm install -g nodemon
 
 # Provides cached layer for node_modules
 ADD package.json /tmp/package.json
-RUN cd /tmp && npm install bcrypt && npm install --production
+RUN . $HOME/.nvm/nvm.sh && nvm alias default $SHIPPABLE_NODE_VERSION && nvm use default \
+    && cd /tmp && npm install bcrypt && npm install --production
 RUN mkdir -p /src && cp -a /tmp/node_modules /src/
 
 # Define working directory
