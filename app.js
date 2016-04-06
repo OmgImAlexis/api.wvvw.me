@@ -1,14 +1,14 @@
-var express = require('express'),
-    cookieParser = require('cookie-parser'),
-    bodyParser = require('body-parser'),
-    methodOverride = require('method-override'),
-    session = require('express-session'),
-    MongoStore = require('connect-mongo')(session),
-    compression = require('compression'),
-    mongoose = require('mongoose'),
-    passport = require('passport'),
-    path = require('path'),
-    config = require('cz');
+const express = require('express');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const methodOverride = require('method-override');
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
+const compression = require('compression');
+const mongoose = require('mongoose');
+const passport = require('passport');
+const path = require('path');
+const config = require('cz');
 
 config.defaults({
     "db":{
