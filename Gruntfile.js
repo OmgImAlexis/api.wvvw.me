@@ -39,8 +39,7 @@ module.exports = function(grunt) {
         },
         jshint: {
             options: {
-                // curly: true,
-                eqeqeq: true
+                jshintrc: '.jshintrc'
             },
             uses_defaults: ['app.js', 'app/**/*.js', 'config/**/*.js']
         }
