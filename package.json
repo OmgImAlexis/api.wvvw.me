@@ -19,7 +19,8 @@
     "mongoose": "^4.0.6",
     "passport": "^0.3.0",
     "passport-local": "^1.0.0",
-    "underscore": "^1.8.0"
+    "underscore": "^1.8.0",
+    "snyk": "1.16.0"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
@@ -35,7 +36,9 @@
     "dev": "export NODE_ENV='dev' && clear && nodemon app.js",
     "prestart": "mongod --fork --logpath /dev/null",
     "start": "nodemon ./app.js",
-    "poststop": "mongo admin --eval 'db.shutdownServer()' > /dev/null"
+    "poststop": "mongo admin --eval 'db.shutdownServer()' > /dev/null",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -46,5 +49,6 @@
   "bugs": {
     "url": "https://github.com/OmgImAlexis/wvvw.me/issues"
   },
-  "homepage": "https://github.com/OmgImAlexis/wvvw.me"
+  "homepage": "https://github.com/OmgImAlexis/wvvw.me",
+  "snyk": true
 }
