@@ -2,7 +2,6 @@ const express = require('express');
 const async = require('async');
 const bodyParser = require('body-parser');
 const Datastore = require('nedb');
-const bcrypt = require('bcrypt');
 const jwt = require('express-jwt');
 
 const app = express();
