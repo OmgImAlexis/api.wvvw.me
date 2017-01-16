@@ -46,7 +46,7 @@ app.post('*', jwt({
 });
 
 app.get('/', (req, res) => {
-    res.send('Welcome!');
+    res.send('Welcome to the API that powers my blog. It can be accessed via https://wvvw.me');
 });
 
 app.get('/posts', (req, res) => {
