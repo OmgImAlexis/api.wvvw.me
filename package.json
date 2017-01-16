@@ -8,7 +8,8 @@
     "bcrypt": "^1.0.2",
     "express": "^4.13.3",
     "express-jwt": "^5.1.0",
-    "nedb": "^1.8.0"
+    "nedb": "^1.8.0",
+    "body-parser": "^1.15.2"
   },
   "private": true,
   "scripts": {
@@ -25,8 +26,5 @@
   "bugs": {
     "url": "https://github.com/OmgImAlexis/wvvw.me/issues"
   },
-  "homepage": "https://github.com/OmgImAlexis/wvvw.me",
-  "devDependencies": {
-    "body-parser": "^1.15.2"
-  }
+  "homepage": "https://github.com/OmgImAlexis/wvvw.me"
 }

@@ -4,9 +4,10 @@ const bodyParser = require('body-parser');
 const Datastore = require('nedb');
 const bcrypt = require('bcrypt');
 const jwt = require('express-jwt');
-const nodeCleanup = require('node-cleanup');
 
 const app = express();
+
+const port = process.env.PORT || 4040;
 
 const posts = new Datastore({
     filename: './dbs/posts.json',
@@ -113,6 +114,6 @@ app.use((error, req, res) => {
     res.status(500);
 });
 
-app.listen(4040, function() {
-    console.log('The server is running on port 4040');
+app.listen(port, function() {
+    console.log(`The server is running on port ${port}`);
 });
