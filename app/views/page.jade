@@ -1,9 +1,0 @@
-extends ./layouts/main
-
-block content
-    .container
-        if ((!user && page.published) || (user))
-            .page.styled(class=(!page.published ? 'unpublished' : ''), data-meta=(user ? page : ''))
-                div!= md(page.content)
-        else
-            p This page hasn't been pushished yet.

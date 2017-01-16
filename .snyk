@@ -1,9 +1,0 @@
-version: v1.5.0
-ignore: {}
-patch:
-  'npm:marked:20150520':
-    - marked:
-        patched: '2016-07-06T12:46:42.129Z'
-  'npm:uglify-js:20151024':
-    - jade > transformers > uglify-js:
-        patched: '2016-07-06T12:46:42.129Z'

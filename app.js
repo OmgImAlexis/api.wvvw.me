@@ -1,97 +1,118 @@
 const express = require('express');
-const cookieParser = require('cookie-parser');
+const async = require('async');
 const bodyParser = require('body-parser');
-const methodOverride = require('method-override');
-const session = require('express-session');
-const MongoStore = require('connect-mongo')(session);
-const compression = require('compression');
-const mongoose = require('mongoose');
-const passport = require('passport');
-const path = require('path');
-const config = require('cz');
+const Datastore = require('nedb');
+const bcrypt = require('bcrypt');
+const jwt = require('express-jwt');
+const nodeCleanup = require('node-cleanup');
 
-config.defaults({
-    "db":{
-        "host": "mongodb",
-        "port": 27017,
-        "collection": "wvvw_me"
-    },
-    "session": {
-        "secret": "adsknasljdnlj3nj4n23jnql"
-    },
-    "web": {
-        "port": 3000
-    },
-    "anon": {
-        "userId": "559804077d6a168bad287d9b",
-        "default": false
-    },
-    "permalink": {
-        "format": "/post/%slug%/"
-    }
+const app = express();
+
+const posts = new Datastore({
+    filename: './dbs/posts.json',
+    autoload: true
 });
-
-config.load(path.normalize(__dirname + '/config.json'));
-config.args();
-config.store('disk');
-
-mongoose.connect('mongodb://' + config.joinGets(['db:host', 'db:port', 'db:collection'], [':', '/']));
-
-var app = express();
+const users = new Datastore({
+    filename: './dbs/users.json',
+    autoload: true
+});
+const secrets = new Datastore({
+    filename: './dbs/secrets.json',
+    autoload: true
+});
 
 app.disable('x-powered-by');
 
-app.set('views', __dirname + '/app/views');
-app.set('view engine', 'jade');
-app.use(compression());
-app.use(express.static(__dirname + '/public', { maxAge: 86400000 }));
-app.use(cookieParser());
 app.use(bodyParser.urlencoded({
-    extended: true
+  extended: true
 }));
 app.use(bodyParser.json());
-app.use(methodOverride());
-app.use(session({
-    secret: config.get('session:secret'),
-    name: 'session',
-    store: new MongoStore({mongooseConnection: mongoose.connection}),
-    proxy: true,
-    resave: true,
-    saveUninitialized: true
-}));
-app.use(passport.initialize());
-app.use(passport.session());
 
-app.use(function(req, res, next){
-    res.locals.user = req.user;
-    next();
+app.post('*', jwt({
+    secret: 'secret'
+}), (req, res, next) => {
+    users.find({
+        jwt: req.headers.jwt
+    }).exec((err, user) => {
+        if (err) {
+            return res.send(err);
+        }
+        if (user) {
+            return next();
+        } else {
+            return next('/')
+        }
+    });
 });
 
-app.use('/api/', require('./app/routes/api'));
+app.get('/', (req, res) => {
+    res.send('Welcome!');
+});
 
-require('./app/config/passport.js')(app, passport);
+app.get('/posts', (req, res) => {
+    posts.find({}).sort({ date: -1 }).exec((err, posts) => {
+        if (err) {
+            console.log(err);
+        } else {
+            async.eachSeries(posts, (post, cb) => {
+                users.findOne({
+                    _id: post.owner
+                }, {
+                    password: 0
+                }, (err, owner) => {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        post.owner = owner;
+                        cb();
+                    }
+                });
+            }, () => {
+                res.send(posts);
+            });
+        }
+    });
+});
 
-app.use('/', require('./app/routes/auth'));
-app.use('/', require('./app/routes/web'));
-app.use('/admin', require('./app/routes/admin'));
+app.post('/posts', (req, res) => {
+    posts.insert(req.body, (err, post) => {
+        if (err) {
+            console.log(err);
+        } else {
+            res.send(post);
+        }
+    });
+});
 
-// Handle 404
-app.use(function(req, res) {
+app.post('/users', (req, res) => {
+    users.insert(req.body, (err, user) => {
+        if (err) {
+            console.log(err);
+        } else {
+            res.send(user);
+        }
+    });
+});
+
+app.get('/posts/:id', (req, res) => {
+    posts.findOne({
+        _id: req.params.id
+    }, (err, post) => {
+        if (err) {
+            console.log(err);
+        }
+        res.send(post);
+    });
+});
+
+app.use((req, res) => {
     res.status(404);
-    res.render('http/404', {
-        title: '404: File Not Found'
-    });
 });
 
-// Handle 500
-app.use(function(error, req, res) {
+app.use((error, req, res) => {
     res.status(500);
-    res.render('http/500', {
-        title: '500: Internal Server Error',
-        error: error
-    });
 });
 
-app.listen(config.get('web:port'), function() {
-    console.log('The server is running on port %s', config.get('web:port'));
+app.listen(4040, function() {
+    console.log('The server is running on port 4040');
 });
