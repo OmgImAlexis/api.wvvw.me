@@ -15,6 +15,9 @@ router.post('/', (req, res) => {
         if (user) {
             user.comparePassword(req.body.password, (err, isMatch) => {
                 if (err || !isMatch) {
+                    if (err) {
+                        console.error(err);
+                    }
                     return res.sendStatus(401);
                 }
                 delete user.password; // Just to be sure
