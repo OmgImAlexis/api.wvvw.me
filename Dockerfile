@@ -13,8 +13,6 @@ ADD . .
 
 RUN yarn install
 
-ADD nginx.conf.sigil .
-
 ENV MONGO_URL 'localhost:27017'
 ENV MONGO_USER ''
 ENV MONGO_PASS ''
