@@ -30,9 +30,7 @@ const postSchema = new Schema({
 });
 
 const autoPopulateAuthor = function(next) {
-    this.populate('author', {
-        _id: 0
-    });
+    this.populate('author');
     next();
 };
 
