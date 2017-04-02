@@ -20,22 +20,31 @@ const userSchema = new Schema({
 });
 
 userSchema.pre('save', function(next) {
-    var user = this;
+    const user = this;
 
-    // only hash the password if it has been modified (or is new)
-    if (!user.isModified('password')) return next();
+    // Only hash the password if it has been modified (or is new)
+    if (!user.isModified('password')) {
+        return next();
+    }
 
     bcrypt.hash(user.password, null, null, (err, hash) => {
+        if (err) {
+            console.error(err);
+            next(err);
+        }
         user.password = hash;
         next();
     });
 });
 
-userSchema.methods.comparePassword = (candidatePassword, cb) => {
+userSchema.methods.comparePassword = function(candidatePassword, cb) {
+    const hash = this.hash;
     bcrypt.compare(candidatePassword, hash, (err, isMatch) => {
-        if (err) return cb(err);
+        if (err) {
+            return cb(err);
+        }
         cb(null, isMatch);
     });
 };
 
-module.exports = mongoose.model('User', userSchema);
+export default mongoose.model('User', userSchema);

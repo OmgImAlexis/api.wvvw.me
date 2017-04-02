@@ -1,3 +1,3 @@
 // @create-index
 
-export { default as isValidObjectId } from './isValidObjectId.js';
+export {default as isValidObjectId} from './is-valid-object-id.js'; // eslint-disable-line import/prefer-default-export

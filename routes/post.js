@@ -2,7 +2,7 @@ import {Router} from 'express';
 import {Post} from '../models';
 import {isValidObjectId} from '../utils';
 
-const router = Router();
+const router = new Router();
 
 router.get(['/', '/:id'], (req, res) => {
     if (req.params.id) {
@@ -19,7 +19,9 @@ router.get(['/', '/:id'], (req, res) => {
             res.send(post);
         });
     } else {
-        Post.find({}).sort({ date: -1 }).exec((err, posts) => {
+        Post.find({}).sort({
+            date: -1
+        }).exec((err, posts) => {
             if (err) {
                 console.error(err);
                 return res.send(err);
@@ -30,7 +32,7 @@ router.get(['/', '/:id'], (req, res) => {
 });
 
 router.post('/', (req, res) => {
-    let post = new Post({
+    const post = new Post({
         ...req.body
     });
     post.save((err, created) => {

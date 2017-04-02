@@ -1,9 +1,14 @@
+import crypto from 'crypto';
 import express from 'express';
-import async from 'async';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import jwt from 'express-jwt';
-import crypto from 'crypto';
+
+import {
+    post,
+    user,
+    token
+} from './routes';
 
 const app = express();
 
@@ -23,9 +28,9 @@ mongoose.connect(db.url, {
     ...db.options
 }).then(() => {
     console.log(`Successfully connected to MongoDB`);
-}).catch((err) => {
+}).catch(err => {
     console.error(`Cannot connect to MongoDB`, err);
-    process.exit();
+    process.exit(); // eslint-disable-line unicorn/no-process-exit
 });
 
 app.disable('x-powered-by');
@@ -44,12 +49,6 @@ app.get('/', (req, res) => {
     res.send('Welcome to the API that powers my blog. It can be accessed via https://wvvw.me');
 });
 
-import {
-    post,
-    user,
-    token
-} from './routes';
-
 app.use('/post', post);
 app.use('/user', user);
 app.use('/token', token);
@@ -58,7 +57,7 @@ app.use((req, res) => {
     res.sendStatus(404);
 });
 
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
     if (err.name === 'UnauthorizedError') {
         return res.status(401).send('Invalid token');
     }

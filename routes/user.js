@@ -2,7 +2,7 @@ import {Router} from 'express';
 import {User} from '../models';
 import {isValidObjectId} from '../utils';
 
-const router = Router();
+const router = new Router();
 
 router.get(['/', '/:id'], (req, res) => {
     if (req.params.id) {
@@ -19,7 +19,9 @@ router.get(['/', '/:id'], (req, res) => {
             res.send(user);
         });
     } else {
-        User.find({}).sort({ date: -1 }).exec((err, users) => {
+        User.find({}).sort({
+            date: -1
+        }).exec((err, users) => {
             if (err) {
                 return res.send(err);
             }
@@ -29,7 +31,7 @@ router.get(['/', '/:id'], (req, res) => {
 });
 
 router.post('/', (req, res) => {
-    let user = new User({
+    const user = new User({
         ...req.body
     });
     user.save((err, created) => {
