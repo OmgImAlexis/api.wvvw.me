@@ -28,3 +28,5 @@ const postSchema = new Schema({
         default: false
     }
 });
+
+module.exports = mongoose.model('Post', postSchema);
