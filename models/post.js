@@ -11,6 +11,10 @@ const postSchema = new Schema({
         type: Date,
         default: new Date()
     },
+    content: {
+        type: String,
+        required: true
+    },
     author: {
         type: Schema.Types.ObjectId,
         ref: 'User'
@@ -18,7 +22,9 @@ const postSchema = new Schema({
     comments: [{
         type: Schema.Types.ObjectId,
         ref: 'Comment'
-    }]
+    }],
+    published: {
+        type: Boolean,
+        default: false
+    }
 });
-
-module.exports = mongoose.model('Post', postSchema);
