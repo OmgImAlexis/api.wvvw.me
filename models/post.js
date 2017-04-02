@@ -29,4 +29,13 @@ const postSchema = new Schema({
     }
 });
 
+const autoPopulateAuthor = function(next) {
+    this.populate('author', {
+        _id: 0
+    });
+    next();
+};
+
+postSchema.pre('findOne', autoPopulateAuthor).pre('find', autoPopulateAuthor);
+
 export default mongoose.model('Post', postSchema);
