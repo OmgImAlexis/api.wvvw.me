@@ -55,14 +55,14 @@ app.use('/user', user);
 app.use('/token', token);
 
 app.use((req, res) => {
-    res.status(404);
+    res.sendStatus(404);
 });
 
 app.use((err, req, res, next) => {
     if (err.name === 'UnauthorizedError') {
         return res.status(401).send('Invalid token');
     }
-    res.status(500);
+    res.sendStatus(500);
 });
 
 app.listen(port, function() {
