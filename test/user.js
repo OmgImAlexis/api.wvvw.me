@@ -35,6 +35,25 @@ test.serial('signup:DuplicateUsername', async t => {
     t.is(res.body.message, 'Please choose another username.');
 });
 
+test('get:All', async t => {
+    t.plan(2);
+
+    const res = await request.get('/user');
+
+    t.is(res.status, 200);
+    t.is(res.body.length, 1);
+});
+
+test('get:byId:Failure', async t => {
+    t.plan(2);
+
+    const user = await request.get('/user');
+    const res = await request.get(`/user/${user.body[0]._id}`);
+
+    t.is(res.status, 200);
+    t.is(res.body[0].username, 'ava');
+});
+
 test.after.always('guaranteed cleanup', () => {
     return new Promise((resolve, reject) => {
         mongoose.connection.dropDatabase(err => {
