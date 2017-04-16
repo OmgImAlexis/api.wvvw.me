@@ -7,7 +7,9 @@ const router = new Router();
 router.get(['/', '/:id'], (req, res) => {
     if (req.params.id) {
         if (!isValidObjectId(req.params.id)) {
-            return res.sendStatus(422);
+            return res.status(422).json({
+                message: `Not sure what you just sent me but it wasn't an ObjectId`
+            });
         }
         Post.find({
             _id: req.params.id
@@ -33,15 +35,20 @@ router.get(['/', '/:id'], (req, res) => {
 
 router.post('/', (req, res) => {
     const post = new Post({
-        ...req.body
+        title: req.body.title,
+        content: req.body.content
     });
     post.save((err, created) => {
         if (err) {
+            // @TODO: Handle this
             console.error(err);
             return res.send(err);
         }
         if (created) {
-            return res.send(post);
+            return res.status(201).json({
+                message: 'Post created successfully.',
+                data: post
+            });
         }
     });
 });

@@ -59,11 +59,11 @@ test('get:All', async t => {
     t.is(res.body.length, 1);
 });
 
-test('get:byId:Failure', async t => {
+test('get:byId', async t => {
     t.plan(2);
 
-    const user = await request.get('/user');
-    const res = await request.get(`/user/${user.body[0]._id}`);
+    const users = await request.get('/user');
+    const res = await request.get(`/user/${users.body[0]._id}`);
 
     t.is(res.status, 200);
     t.is(res.body[0].username, 'ava');
