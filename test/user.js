@@ -35,6 +35,21 @@ test.serial('signup:DuplicateUsername', async t => {
     t.is(res.body.message, 'Please choose another username.');
 });
 
+test.serial('signup:Disabled', async t => {
+    t.plan(2);
+
+    config.set('signups:enabled', false);
+
+    const res = await request.post('/user').send({
+        username: 'xo',
+        password: 'rocks'
+    });
+
+    t.is(res.status, 503);
+    t.is(res.body.message, 'Signups currently disabled.');
+    config.set('signups:enabled', true);
+});
+
 test('get:All', async t => {
     t.plan(2);
 
