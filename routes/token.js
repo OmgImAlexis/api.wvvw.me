@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import {Router} from 'express';
 import {User} from '../models';
+import {config} from '../';
 
 const router = new Router();
 
@@ -9,36 +10,38 @@ router.post('/', (req, res) => {
         username: req.body.username
     }).select('+password').exec((err, user) => {
         if (err) {
+            // @TODO: Handle error
             console.error(err);
-            return res.send(err);
         }
         if (user) {
             user.comparePassword(req.body.password, (err, isMatch) => {
                 if (err || !isMatch) {
-                    if (err) {
-                        console.error(err);
-                    }
-                    return res.sendStatus(401);
+                    return res.status(401).json({
+                        message: 'Either no user was found or you suppplied an incorrect user/pass.'
+                    });
                 }
                 delete user.password; // Just to be sure
                 jwt.sign({
                     username: user.username,
                     iat: Math.floor(Date.now() / 1000) - 30 // Set issue date 30 seconds ago
-                }, req.app.get('jwtSecret'), {
+                }, config.get('jwt:secret'), {
                     expiresIn: 3600,
                     issuer: 'wvvw.me'
                 }, (err, token) => {
                     if (err) {
-                        return res.send(err);
+                        return res.status(500).json(err);
                     }
-                    res.send({
+                    res.status(201).json({
                         token,
                         expiresIn: 3600
                     });
                 });
             });
+        } else {
+            res.status(401).json({
+                message: 'Either no user was found or you suppplied an incorrect user/pass.'
+            });
         }
-        res.sendStatus(401);
     });
 });
 

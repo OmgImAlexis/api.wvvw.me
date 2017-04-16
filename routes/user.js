@@ -1,4 +1,6 @@
 import {Router} from 'express';
+
+import {config} from '../';
 import {User} from '../models';
 import {isValidObjectId} from '../utils';
 
@@ -31,18 +33,35 @@ router.get(['/', '/:id'], (req, res) => {
 });
 
 router.post('/', (req, res) => {
-    const user = new User({
-        ...req.body
-    });
-    user.save((err, created) => {
-        if (err) {
-            console.error(err);
-            return res.send(err);
-        }
-        if (created) {
-            return res.send(user);
-        }
-    });
+    if (config.get('signups:enabled')) {
+        const user = new User({
+            username: req.body.username || undefined,
+            email: req.body.email || undefined,
+            password: req.body.password
+        });
+        user.save((err, created) => {
+            if (err) {
+                // Duplicate field
+                if (err.code === 11000) {
+                    return res.status(503).json({
+                        message: 'Please choose another username.'
+                    });
+                }
+                return res.status(500).json({
+                    error: err
+                });
+            }
+            if (created) {
+                return res.status(201).json({
+                    message: 'User created successfully.'
+                });
+            }
+        });
+    } else {
+        return res.status(503).json({
+            message: 'Signups currently disabled.'
+        });
+    }
 });
 
 export default router;

@@ -1,0 +1,73 @@
+import test from 'ava';
+import supertest from 'supertest';
+import mongoose from 'mongoose';
+
+import {app, config} from '../';
+
+const request = supertest(app);
+
+test.before(async () => {
+    await new Promise((resolve, reject) => mongoose.connect('mongodb://localhost/token-test').then(resolve).catch(reject));
+    config.set('signups:enabled', true);
+    await request.post('/user').send({
+        username: 'ava',
+        password: 'rocks'
+    });
+});
+
+test.serial('token:Success', async t => {
+    t.plan(3);
+
+    const res = await request.post('/token').send({
+        username: 'ava',
+        password: 'rocks'
+    });
+
+    t.is(res.status, 201);
+    t.is(res.body.token.length, 172);
+    t.is(res.body.expiresIn, 3600);
+});
+
+test.serial('token:Failure:password', async t => {
+    t.plan(2);
+
+    const res = await request.post('/token').send({
+        username: 'ava',
+        password: 'sucks'
+    });
+
+    t.is(res.status, 401);
+    t.is(res.body.message, 'Either no user was found or you suppplied an incorrect user/pass.');
+});
+
+test.serial('token:Failure:username', async t => {
+    t.plan(2);
+
+    const res = await request.post('/token').send({
+        username: 'eve',
+        password: 'rocks'
+    });
+
+    t.is(res.status, 401);
+    t.is(res.body.message, 'Either no user was found or you suppplied an incorrect user/pass.');
+});
+
+test.serial('token:Failure:no-body', async t => {
+    t.plan(2);
+
+    const res = await request.post('/token').send({});
+
+    t.is(res.status, 401);
+    t.is(res.body.message, 'Either no user was found or you suppplied an incorrect user/pass.');
+});
+
+test.after.always('guaranteed cleanup', () => {
+    return new Promise((resolve, reject) => {
+        mongoose.connection.dropDatabase(err => {
+            if (err) {
+                reject(err);
+            }
+            resolve();
+        });
+    });
+});

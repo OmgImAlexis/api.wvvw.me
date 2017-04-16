@@ -3,6 +3,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import jwt from 'express-jwt';
+import Cz from 'cz';
 
 import {
     post,
@@ -10,39 +11,46 @@ import {
     token
 } from './routes';
 
+const config = new Cz();
 const app = express();
 
-const port = process.env.PORT || 4040;
-const db = {
+config.load('./config.json');
+
+config.set('port', process.env.PORT || 4040);
+config.set('db', {
     url: process.env.MONGO_URL || 'mongodb://localhost:27017/wvvw_me',
     options: {
         user: process.env.MONGO_USER || '',
         pass: process.env.MONGO_PASS || ''
     }
-};
-const jwtSecret = process.env.JWT_SECRET || crypto.randomBytes(64).toString('hex');
+});
+config.set('jwt', {
+    secret: process.env.JWT_SECRET || crypto.randomBytes(64).toString('hex')
+});
 
 mongoose.Promise = global.Promise;
 
-mongoose.connect(db.url, {
-    ...db.options
-}).then(() => {
-    console.log(`Successfully connected to MongoDB`);
-}).catch(err => {
-    console.error(`Cannot connect to MongoDB`, err);
-    process.exit(); // eslint-disable-line unicorn/no-process-exit
-});
+if (process.env.NODE_ENV !== 'test') {
+    mongoose.connect(config.get('db:url'), {
+        ...config.get('db:options')
+    }).then(() => {
+        console.log(`Successfully connected to MongoDB`);
+    }).catch(err => {
+        console.error(`Cannot connect to MongoDB`, err);
+        process.exit(); // eslint-disable-line unicorn/no-process-exit
+    });
+}
 
 app.disable('x-powered-by');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
-app.set('jwtSecret', jwtSecret);
+app.set('jwtSecret', config.get('jwt:secret'));
 
 app.post('*', jwt({
-    secret: jwtSecret
+    secret: config.get('jwt:secret')
 }).unless({
-    path: ['/token']
+    path: ['/token', '/user']
 }));
 
 app.get('/', (req, res) => {
@@ -64,10 +72,19 @@ app.use((err, req, res) => {
     res.sendStatus(500);
 });
 
-app.listen(port, () => {
-    console.log(`The server is running on port ${port}`);
-});
+if (process.env.NODE_ENV !== 'test') {
+    app.listen(config.get('port'), () => {
+        console.info(`The server is running on port ${config.get('port')}`);
+    });
+}
 
 process.on('uncaughtException', err => {
-    console.log('Caught exception', err);
+    console.error('Caught exception', err);
 });
+
+export default app;
+
+export {
+    app,
+    config
+};

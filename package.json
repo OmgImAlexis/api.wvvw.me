@@ -11,6 +11,7 @@
         "babel-preset-stage-2": "^6.22.0",
         "bcrypt-nodejs": "^0.0.3",
         "body-parser": "^1.15.2",
+        "cz": "^1.8.0",
         "express": "^4.13.3",
         "express-jwt": "^5.1.0",
         "jsonwebtoken": "^7.3.0",
@@ -19,8 +20,8 @@
     },
     "private": true,
     "scripts": {
-        "test": "xo && exit 0",
-        "dev": "export NODE_ENV='dev' && clear && yarn start",
+        "test": "xo && cross-env NODE_ENV='test' nyc ava",
+        "dev": "cross-env NODE_ENV='dev' yarn start",
         "start": "node_modules/.bin/babel-node index.js"
     },
     "repository": {
@@ -34,7 +35,11 @@
     },
     "homepage": "https://github.com/OmgImAlexis/wvvw.me",
     "devDependencies": {
+        "ava": "^0.19.1",
         "babel-watch": "^2.0.6",
+        "cross-env": "^4.0.0",
+        "nyc": "^10.2.0",
+        "supertest": "^3.0.0",
         "xo": "^0.18.1"
     },
     "xo": {
@@ -49,5 +54,36 @@
             "node",
             "es6"
         ]
+    },
+    "ava": {
+        "require": [
+            "babel-core/register"
+        ]
+    },
+    "nyc": {
+        "exclude": [
+            "models/index.js",
+            "routes/index.js",
+            "utils/index.js",
+            "test",
+            "test{,-*}.js",
+            "**/*.test.js",
+            "**/__tests__/**",
+            "**/node_modules/**"
+        ]
+    },
+    "babel": {
+        "presets": [
+            "es2015"
+        ],
+        "plugins": [
+            "transform-runtime"
+        ],
+        "ignore": "test.js",
+        "env": {
+            "development": {
+                "sourceMaps": "inline"
+            }
+        }
     }
 }
