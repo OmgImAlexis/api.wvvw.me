@@ -2,11 +2,15 @@ import {Router} from 'express';
 
 import {config} from '../';
 import {User} from '../models';
-import {isValidObjectId} from '../utils';
+import isValidObjectId from '../utils/is-valid-object-id';
+import RestError from '../utils/rest-error';
+import {
+    USER
+} from '../utils/consts';
 
 const router = new Router();
 
-router.get(['/', '/:id'], (req, res) => {
+router.get(['/', '/:id'], (req, res, next) => {
     if (req.params.id) {
         if (!isValidObjectId(req.params.id)) {
             return res.sendStatus(422);
@@ -15,8 +19,7 @@ router.get(['/', '/:id'], (req, res) => {
             _id: req.params.id
         }).exec((err, user) => {
             if (err) {
-                console.error(err);
-                return res.send(err);
+                return next(err);
             }
             res.send(user);
         });
@@ -25,14 +28,14 @@ router.get(['/', '/:id'], (req, res) => {
             date: -1
         }).exec((err, users) => {
             if (err) {
-                return res.send(err);
+                return next(err);
             }
             res.send(users);
         });
     }
 });
 
-router.post('/', (req, res) => {
+router.post('/', (req, res, next) => {
     if (config.get('signups:enabled')) {
         const user = new User({
             username: req.body.username || undefined,
@@ -43,24 +46,21 @@ router.post('/', (req, res) => {
             if (err) {
                 // Duplicate field
                 if (err.code === 11000) {
-                    return res.status(503).json({
-                        message: 'Please choose another username.'
-                    });
+                    return next(new RestError(USER.CREATED.FAILURE.DUPLICATE));
                 }
-                return res.status(500).json({
-                    error: err
-                });
+                return next(err);
             }
             if (created) {
-                return res.status(201).json({
-                    message: 'User created successfully.'
+                return res.status(USER.CREATED.SUCCESS.status).json({
+                    message: USER.CREATED.SUCCESS.message,
+                    data: {
+                        user
+                    }
                 });
             }
         });
     } else {
-        return res.status(503).json({
-            message: 'Signups currently disabled.'
-        });
+        next(new RestError(USER.CREATED.FAILURE.DISABLED));
     }
 });
 

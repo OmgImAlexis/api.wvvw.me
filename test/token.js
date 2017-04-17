@@ -3,6 +3,7 @@ import supertest from 'supertest';
 import mongoose from 'mongoose';
 
 import {app, config} from '../';
+import {TOKEN} from '../utils/consts';
 
 const request = supertest(app);
 
@@ -24,8 +25,8 @@ test.serial('token:Success', async t => {
     });
 
     t.is(res.status, 201);
-    t.is(res.body.token.length, 172);
-    t.is(res.body.expiresIn, 3600);
+    t.is(res.body.data.token.length, 172);
+    t.is(res.body.data.expiresIn, 3600);
 });
 
 test.serial('token:Failure:password', async t => {
@@ -36,8 +37,8 @@ test.serial('token:Failure:password', async t => {
         password: 'sucks'
     });
 
-    t.is(res.status, 401);
-    t.is(res.body.message, 'Either no user was found or you suppplied an incorrect user/pass.');
+    t.is(res.status, TOKEN.INVALID_DETAILS.status);
+    t.is(res.body.message, TOKEN.INVALID_DETAILS.message);
 });
 
 test.serial('token:Failure:username', async t => {
@@ -48,8 +49,8 @@ test.serial('token:Failure:username', async t => {
         password: 'rocks'
     });
 
-    t.is(res.status, 401);
-    t.is(res.body.message, 'Either no user was found or you suppplied an incorrect user/pass.');
+    t.is(res.status, TOKEN.INVALID_DETAILS.status);
+    t.is(res.body.message, TOKEN.INVALID_DETAILS.message);
 });
 
 test.serial('token:Failure:no-body', async t => {
@@ -57,8 +58,8 @@ test.serial('token:Failure:no-body', async t => {
 
     const res = await request.post('/token').send({});
 
-    t.is(res.status, 401);
-    t.is(res.body.message, 'Either no user was found or you suppplied an incorrect user/pass.');
+    t.is(res.status, TOKEN.INVALID_DETAILS.status);
+    t.is(res.body.message, TOKEN.INVALID_DETAILS.message);
 });
 
 test.after.always('guaranteed cleanup', () => {

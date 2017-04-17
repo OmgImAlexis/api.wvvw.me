@@ -3,6 +3,7 @@ import supertest from 'supertest';
 import mongoose from 'mongoose';
 
 import {app, config} from '../';
+import {USER} from '../utils/consts';
 
 const request = supertest(app);
 
@@ -19,8 +20,8 @@ test.serial('signup:Success', async t => {
         password: 'rocks'
     });
 
-    t.is(res.status, 201);
-    t.is(res.body.message, 'User created successfully.');
+    t.is(res.status, USER.CREATED.SUCCESS.status);
+    t.is(res.body.message, USER.CREATED.SUCCESS.message);
 });
 
 test.serial('signup:DuplicateUsername', async t => {
@@ -31,8 +32,8 @@ test.serial('signup:DuplicateUsername', async t => {
         password: 'rocks'
     });
 
-    t.is(res.status, 503);
-    t.is(res.body.message, 'Please choose another username.');
+    t.is(res.status, USER.CREATED.FAILURE.DUPLICATE.status);
+    t.is(res.body.message, USER.CREATED.FAILURE.DUPLICATE.message);
 });
 
 test.serial('signup:Disabled', async t => {
@@ -45,8 +46,8 @@ test.serial('signup:Disabled', async t => {
         password: 'rocks'
     });
 
-    t.is(res.status, 503);
-    t.is(res.body.message, 'Signups currently disabled.');
+    t.is(res.status, USER.CREATED.FAILURE.DISABLED.status);
+    t.is(res.body.message, USER.CREATED.FAILURE.DISABLED.message);
     config.set('signups:enabled', true);
 });
 

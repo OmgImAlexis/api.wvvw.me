@@ -3,6 +3,7 @@ import supertest from 'supertest';
 import mongoose from 'mongoose';
 
 import {app, config} from '../';
+import {POST} from '../utils/consts';
 
 const request = supertest(app);
 
@@ -23,14 +24,14 @@ test.serial('post:create:Success', async t => {
         username: 'ava',
         password: 'rocks'
     });
-    const res = await request.post('/post').set('Authorization', `Bearer ${token.body.token}`).send({
+    const res = await request.post('/post').set('Authorization', `Bearer ${token.body.data.token}`).send({
         title: 'ava',
         content: 'ava is the best',
         author: users.body[0]._id
     });
 
-    t.is(res.status, 201);
-    t.is(res.body.message, 'Post created successfully.');
+    t.is(res.status, POST.CREATED.SUCCESS.status);
+    t.is(res.body.message, POST.CREATED.SUCCESS.message);
 });
 
 test('get:All', async t => {
@@ -49,17 +50,27 @@ test('get:byId:Success', async t => {
     const res = await request.get(`/post/${posts.body[0]._id}`);
 
     t.is(res.status, 200);
-    t.is(res.body[0].title, 'ava');
-    t.is(res.body[0].content, 'ava is the best');
+    t.is(res.body.title, 'ava');
+    t.is(res.body.content, 'ava is the best');
 });
 
-test('get:byId:Failure', async t => {
+test('get:byId:Failure:InvalidObjectId', async t => {
     t.plan(2);
 
     const res = await request.get(`/post/---------------`);
 
-    t.is(res.status, 422);
-    t.is(res.body.message, `Not sure what you just sent me but it wasn't an ObjectId`);
+    t.is(res.status, POST.INVALID_DETAILS.status);
+    t.is(res.body.message, POST.INVALID_DETAILS.message);
+});
+
+test('get:byId:Failure:NotFound', async t => {
+    t.plan(2);
+
+    const id = new mongoose.Types.ObjectId();
+    const res = await request.get(`/post/${id}`);
+
+    t.is(res.status, POST.NOT_FOUND.status);
+    t.is(res.body.message, POST.NOT_FOUND.message);
 });
 
 test.after.always('guaranteed cleanup', () => {

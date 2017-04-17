@@ -61,15 +61,23 @@ app.use('/post', post);
 app.use('/user', user);
 app.use('/token', token);
 
-app.use((req, res) => {
-    res.sendStatus(404);
-});
-
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
+    if (!err) {
+        next();
+    }
     if (err.name === 'UnauthorizedError') {
         return res.status(401).send('Invalid token');
     }
-    res.sendStatus(500);
+    if (err.name === 'RestError') {
+        return res.status(err.status).send({
+            message: err.message
+        });
+    }
+    return res.sendStatus(500);
+});
+
+app.use((req, res) => {
+    res.sendStatus(404);
 });
 
 if (process.env.NODE_ENV !== 'test') {

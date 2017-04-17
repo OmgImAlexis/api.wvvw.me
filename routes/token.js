@@ -1,11 +1,15 @@
 import jwt from 'jsonwebtoken';
 import {Router} from 'express';
 import {User} from '../models';
+import RestError from '../utils/rest-error';
+import {
+    TOKEN
+} from '../utils/consts';
 import {config} from '../';
 
 const router = new Router();
 
-router.post('/', (req, res) => {
+router.post('/', (req, res, next) => {
     User.findOne({
         username: req.body.username
     }).select('+password').exec((err, user) => {
@@ -15,10 +19,11 @@ router.post('/', (req, res) => {
         }
         if (user) {
             user.comparePassword(req.body.password, (err, isMatch) => {
-                if (err || !isMatch) {
-                    return res.status(401).json({
-                        message: 'Either no user was found or you suppplied an incorrect user/pass.'
-                    });
+                if (err) {
+                    return next(err);
+                }
+                if (!isMatch) {
+                    return next(new RestError(TOKEN.INVALID_DETAILS));
                 }
                 delete user.password; // Just to be sure
                 jwt.sign({
@@ -29,18 +34,19 @@ router.post('/', (req, res) => {
                     issuer: 'wvvw.me'
                 }, (err, token) => {
                     if (err) {
-                        return res.status(500).json(err);
+                        return next(err);
                     }
-                    res.status(201).json({
-                        token,
-                        expiresIn: 3600
+                    return res.status(TOKEN.CREATED.SUCCESS.status).json({
+                        message: TOKEN.CREATED.SUCCESS.message,
+                        data: {
+                            token,
+                            expiresIn: 3600
+                        }
                     });
                 });
             });
         } else {
-            res.status(401).json({
-                message: 'Either no user was found or you suppplied an incorrect user/pass.'
-            });
+            return next(new RestError(TOKEN.INVALID_DETAILS));
         }
     });
 });
