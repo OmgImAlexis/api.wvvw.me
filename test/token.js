@@ -62,6 +62,17 @@ test.serial('token:Failure:no-body', async t => {
     t.is(res.body.message, TOKEN.INVALID_DETAILS.message);
 });
 
+test.serial('token:Failure:no-password-field', async t => {
+    t.plan(2);
+
+    const res = await request.post('/token').send({
+        username: 'ava'
+    });
+
+    t.is(res.status, TOKEN.MISSING_PARAM.status);
+    t.is(res.body.message, TOKEN.MISSING_PARAM.message);
+});
+
 test.after.always('guaranteed cleanup', () => {
     return new Promise((resolve, reject) => {
         mongoose.connection.dropDatabase(err => {

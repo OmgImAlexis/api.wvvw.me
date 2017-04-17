@@ -61,6 +61,10 @@ const TOKEN = {
     INVALID_DETAILS: {
         status: 401,
         message: __(`Either no user was found or you suppplied an incorrect user/pass.`)
+    },
+    MISSING_PARAM: {
+        status: 422,
+        message: __(`Both "username" and "password" fields are required.`)
     }
 };
 

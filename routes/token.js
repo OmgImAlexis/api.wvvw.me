@@ -14,12 +14,14 @@ router.post('/', (req, res, next) => {
         username: req.body.username
     }).select('+password').exec((err, user) => {
         if (err) {
-            // @TODO: Handle error
-            console.error(err);
+            return next(err);
         }
         if (user) {
             user.comparePassword(req.body.password, (err, isMatch) => {
                 if (err) {
+                    if (err === 'Incorrect arguments') {
+                        return next(new RestError(TOKEN.MISSING_PARAM));
+                    }
                     return next(err);
                 }
                 if (!isMatch) {
