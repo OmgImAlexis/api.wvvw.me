@@ -9,9 +9,9 @@ RUN apk --no-cache add tini git openssh-client \
 RUN mkdir /app
 
 WORKDIR /app
-ADD . .
 
-RUN yarn install
+RUN yarn install --production
+COPY . .
 
 ENV MONGO_URL 'localhost:27017'
 ENV MONGO_USER ''
@@ -21,4 +21,4 @@ EXPOSE 5000
 
 ENTRYPOINT ["/sbin/tini"]
 
-CMD ["yarn", "start"]
+CMD ["yarn", "start:production"]

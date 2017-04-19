@@ -20,9 +20,10 @@
     },
     "private": true,
     "scripts": {
-        "test": "xo && cross-env NODE_ENV='test' nyc ava",
-        "dev": "cross-env NODE_ENV='dev' yarn start",
-        "start": "node_modules/.bin/babel-node index.js"
+        "test": "xo && cross-env NODE_ENV='test' nyc ava test/*.spec.js",
+        "start": "yarn start:production",
+        "start:production": "cross-env NODE_ENV='production' babel-node index.js",
+        "start:development": "cross-env NODE_ENV='dev' yarn start"
     },
     "repository": {
         "type": "git",
