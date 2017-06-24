@@ -53,7 +53,7 @@ app.set('jwtSecret', config.get('jwt:secret'));
 app.post('*', jwt({
     secret: config.get('jwt:secret')
 }).unless({
-    path: ['/token', '/user']
+    path: ['/token/', '/user/']
 }));
 
 app.get('/', (req, res) => {
