@@ -35,7 +35,7 @@ router.get(['/', '/:id'], (req, res, next) => {
     }
 });
 
-router.post('/', (req, res, next) => {
+router.post(['', '/'], (req, res, next) => {
     if (config.get('signups:enabled') || process.env.SIGNUPS_ENABLED) {
         const user = new User({
             username: req.body.username || undefined,
