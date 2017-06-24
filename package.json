@@ -9,21 +9,20 @@
         "babel-core": "^6.24.0",
         "babel-preset-es2015": "^6.24.0",
         "babel-preset-stage-2": "^6.22.0",
-        "bcrypt-nodejs": "^0.0.3",
+        "bcryptjs": "^2.4.3",
         "body-parser": "^1.15.2",
         "cz": "^1.8.2",
         "express": "^4.13.3",
         "express-jwt": "^5.1.0",
         "jsonwebtoken": "^7.3.0",
-        "mongoose": "^4.9.2",
-        "winston": "^2.3.1"
+        "mongoose": "^4.9.2"
     },
     "private": true,
     "scripts": {
-        "test": "xo && cross-env NODE_ENV='test' nyc ava test/*.spec.js",
+        "test": "xo && cross-env NODE_ENV=test 'nyc ava test/*.spec.js'",
         "start": "yarn start:production",
-        "start:production": "cross-env NODE_ENV='production' babel-node index.js",
-        "start:development": "cross-env NODE_ENV='dev' yarn start"
+        "start:production": "cross-env NODE_ENV=production babel-node index.js",
+        "start:development": "cross-env NODE_ENV=dev yarn start"
     },
     "repository": {
         "type": "git",
@@ -42,7 +41,7 @@
         "cross-env": "^4.0.0",
         "nyc": "^10.2.0",
         "supertest": "^3.0.0",
-        "xo": "^0.18.1"
+        "xo": "^0.18.2"
     },
     "xo": {
         "space": 4,

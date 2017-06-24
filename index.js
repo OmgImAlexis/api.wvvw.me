@@ -18,15 +18,16 @@ config.load('./config.json');
 
 config.set('port', process.env.PORT || 4040);
 config.set('db', {
-    url: process.env.MONGO_URL || 'mongodb://localhost:27017/wvvw_me',
+    url: `mongodb://${process.env.MONGO_HOST}/${process.env.MONGO_DATABASE}`,
     options: {
         user: process.env.MONGO_USER || '',
-        pass: process.env.MONGO_PASS || ''
+        pass: process.env.MONGO_PWD || ''
     }
 });
 config.set('jwt', {
     secret: process.env.JWT_SECRET || crypto.randomBytes(64).toString('hex')
 });
+config.set('bcrypt:rounds', 10);
 
 mongoose.Promise = global.Promise;
 

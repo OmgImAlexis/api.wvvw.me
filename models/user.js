@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
-import bcrypt from 'bcrypt-nodejs';
+import bcrypt from 'bcryptjs';
+import {config} from '../index';
 
 const Schema = mongoose.Schema;
 
@@ -30,19 +31,21 @@ userSchema.pre('save', function(next) {
         return next();
     }
 
-    bcrypt.hash(this.password, null, null, (err, hash) => {
+    bcrypt.genSalt(config.get('bcypt:rounds'), (err, salt) => {
         if (err) {
-            console.error(err);
             next(err);
         }
-        this.password = hash;
-        next();
+        bcrypt.hash(this.password, salt, (err, hash) => {
+            if (err) {
+                next(err);
+            }
+            this.password = hash;
+        });
     });
 });
 
-userSchema.methods.comparePassword = function(candidatePassword, next) {
-    const hash = this.password;
-    bcrypt.compare(candidatePassword, hash, (err, isMatch) => {
+userSchema.methods.comparePassword = function(hash, next) {
+    bcrypt.compare(hash, this.password, (err, isMatch) => {
         if (err) {
             return next(err);
         }
