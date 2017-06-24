@@ -3,7 +3,6 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import jwt from 'express-jwt';
-import gitRev from 'git-rev-sync';
 import Cz from 'cz';
 
 import {
@@ -87,8 +86,6 @@ app.use((req, res) => {
 if (process.env.NODE_ENV !== 'test') {
     app.listen(config.get('port'), () => {
         console.info(`${process.env.APP_NAME || `Your personal API`} is running on port ${config.get('port')}.`);
-        console.info(`Commit: ${gitRev.long()}`);
-        console.info(`Branch: ${gitRev.branch()}`);
         console.info(`Version: ${version}`);
     });
 }
