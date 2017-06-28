@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
-import {config} from '../index';
+import config from '../config';
+
+mongoose.Promise = global.Promise;
 
 const Schema = mongoose.Schema;
 
@@ -30,18 +32,8 @@ userSchema.pre('save', function(next) {
     if (!this.isModified('password')) {
         return next();
     }
-
-    bcrypt.genSalt(config.get('bcypt:rounds'), (err, salt) => {
-        if (err) {
-            next(err);
-        }
-        bcrypt.hash(this.password, salt, (err, hash) => {
-            if (err) {
-                next(err);
-            }
-            this.password = hash;
-        });
-    });
+    this.password = bcrypt.hashSync(this.password, config.get('bcypt.rounds'));
+    next();
 });
 
 userSchema.methods.comparePassword = function(hash, next) {

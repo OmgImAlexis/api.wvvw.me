@@ -1,17 +1,16 @@
 {
-    "name": "wvvw.me",
-    "version": "0.0.0",
-    "description": "wvvw.me website",
+    "name": "liftoff",
+    "version": "0.0.1",
+    "description": "API for Lift Off blogging platform.",
     "private": true,
     "scripts": {
         "test": "xo && cross-env NODE_ENV=test 'nyc ava test/*.spec.js'",
-        "start": "yarn start:production",
-        "start:production": "cross-env NODE_ENV=production babel-node index.js",
-        "start:development": "cross-env NODE_ENV=dev yarn start"
+        "start": "cross-env NODE_ENV=production babel-node index.js",
+        "start:development": "cross-env NODE_ENV=development babel-node index.js"
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/OmgImAlexis/wvvw.me"
+        "url": "https://github.com/OmgImAlexis/liftoff"
     },
     "author": "OmgImAlexis",
     "license": "SEE LICENSE IN LICENSE.md",
@@ -19,29 +18,35 @@
         "url": "https://github.com/OmgImAlexis/wvvw.me/issues"
     },
     "homepage": "https://github.com/OmgImAlexis/wvvw.me",
-    "main": "app.js",
+    "main": "main.js",
     "engines": {
         "node": ">=6.0.0"
     },
     "dependencies": {
         "async": "^2.1.4",
-        "babel-cli": "^6.24.0",
+        "babel-cli": "^6.24.1",
         "babel-core": "^6.24.0",
         "babel-preset-es2015": "^6.24.0",
         "babel-preset-stage-2": "^6.22.0",
         "bcryptjs": "^2.4.3",
         "body-parser": "^1.15.2",
+        "bunyan": "^1.8.10",
+        "configstore": "^3.1.0",
         "cross-env": "^4.0.0",
         "cz": "^1.8.2",
         "express": "^4.13.3",
+        "express-api-error-handler": "^1.1.0",
         "express-jwt": "^5.1.0",
+        "http-errors": "^1.6.1",
         "jsonwebtoken": "^7.3.0",
+        "loud-rejection": "^1.6.0",
         "mongoose": "^4.9.2"
     },
     "devDependencies": {
         "ava": "^0.19.1",
         "babel-watch": "^2.0.6",
         "coveralls": "^2.13.0",
+        "mongomem": "^0.1.9",
         "nyc": "^10.2.0",
         "supertest": "^3.0.0",
         "xo": "^0.18.2"
@@ -52,42 +57,47 @@
             "space-before-function-paren": [
                 "error",
                 "never"
-            ]
+            ],
+            "no-console": "error",
+            "unicorn/no-new-buffer": "off",
+            "unicorn/filename-case": "off",
+            "unicorn/custom-error-definition": "off",
+            "unicorn/no-array-instanceof": "off",
+            "unicorn/catch-error-name": "off",
+            "unicorn/no-process-exit": "off",
+            "unicorn/throw-new-error": "off",
+            "unicorn/number-literal-case": "off",
+            "unicorn/prefer-starts-ends-with": "off",
+            "unicorn/prefer-type-error": "off",
+            "unicorn/explicit-length-check": "off",
+            "unicorn/no-abusive-eslint-disable": "off"
         },
         "envs": [
             "node",
             "es6"
         ]
     },
+    "babel": {
+        "presets": [
+            "es2015",
+            "stage-2",
+            "@ava/transform-test-files"
+        ],
+        "plugins": [
+            "transform-regenerator"
+        ]
+    },
     "ava": {
+        "babel": "inherit",
         "require": [
-            "babel-core/register"
+            "babel-register",
+            "babel-polyfill"
         ]
     },
     "nyc": {
-        "exclude": [
-            "models/index.js",
-            "routes/index.js",
-            "utils/index.js",
-            "test",
-            "test{,-*}.js",
-            "**/*.test.js",
-            "**/__tests__/**",
-            "**/node_modules/**"
+        "reporter": [
+            "lcov",
+            "text"
         ]
-    },
-    "babel": {
-        "presets": [
-            "es2015"
-        ],
-        "plugins": [
-            "transform-runtime"
-        ],
-        "ignore": "test.js",
-        "env": {
-            "development": {
-                "sourceMaps": "inline"
-            }
-        }
     }
 }
