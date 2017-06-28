@@ -67,3 +67,6 @@ dbs
 node_modules
 coverage
 .nyc_output
+
+# Build files
+dist

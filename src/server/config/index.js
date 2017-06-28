@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 import Configstore from 'configstore';
-import {name, version} from '../package';
+import {name, version} from '../../../package';
 
 const config = new Configstore(name, {
     app: {
@@ -23,7 +23,7 @@ const config = new Configstore(name, {
         rounds: 10
     },
     signups: {
-        enabled: false
+        enabled: true
     }
 });
 

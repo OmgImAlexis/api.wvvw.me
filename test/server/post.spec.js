@@ -10,7 +10,7 @@ test.before('start server', async () => {
 
 test.beforeEach(async t => {
     const db = await getMongooseMock();
-    const app = require('../main').default;
+    const app = require('.').default;
 
     // Setup any fixtures you need here. This is a placeholder code
     await setupFixtures();
@@ -28,15 +28,10 @@ test.afterEach.always(async t => {
 });
 
 // Note the serial tests
-test.serial('create', async t => {
+test.serial('healthcheck', async t => {
     const {app} = t.context;
-    const res = await request(app).post('/user').send({
-        username: 'ava',
-        password: 'avarocks',
-        email: 'ava@example.com'
-    });
-    t.is(res.status, 201);
-    t.is(res.body.user.username, 'ava');
+    const res = await request(app).get('/healthcheck');
+    t.is(res.status, 200);
 });
 
 test.after.always('cleanup', () => MongoDBServer.tearDown());
