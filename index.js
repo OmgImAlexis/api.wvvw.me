@@ -5,13 +5,15 @@ import config from './config';
 import log from './log';
 import {version} from './package';
 
+const port = process.env.PORT || config.get('app.port');
+
 if (config.get('database.enabled')) {
     mongoose.connect(process.env.MONGO_URL || config.get('database.url'));
 } else {
     log.info('Starting without database');
 }
 
-app.listen(config.get('app.port'), () => {
+app.listen(port, () => {
     const name = config.get('app.name') || `Your personal API`;
-    log.info(`${name} ${version} is running on port ${config.get('app.port')}.`);
+    log.info(`${name} ${version} is running on port ${port}.`);
 });
