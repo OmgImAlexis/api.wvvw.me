@@ -10,8 +10,7 @@
         "build-server": "babel ./src/server -d ./dist/server -s",
         "lint": "xo",
         "test": "nyc ava test/**/*.spec.js",
-        "start": "node ./dist/server/index.js",
-        "postinstall": "yarn install --production=false && npm run build"
+        "start": "node ./dist/server/index.js"
     },
     "repository": {
         "type": "git",
