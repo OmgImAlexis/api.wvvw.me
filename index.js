@@ -8,7 +8,7 @@ import {version} from './package';
 const port = process.env.PORT || config.get('app.port');
 
 if (config.get('database.enabled')) {
-    mongoose.connect(process.env.MONGO_URL || config.get('database.url'));
+    mongoose.connect(process.env.MONGO_URL || config.get('database.url')).catch(log.error);
 } else {
     log.info('Starting without database');
 }
