@@ -11,7 +11,7 @@
         "lint": "xo",
         "test": "nyc ava test/**/*.spec.js",
         "start": "node ./dist/server/index.js",
-        "postinstall": "npm run build",
+        "postinstall": "npm run build"
     },
     "repository": {
         "type": "git",
