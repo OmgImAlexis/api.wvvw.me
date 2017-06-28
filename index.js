@@ -6,9 +6,15 @@ import log from './log';
 import {version} from './package';
 
 const port = process.env.PORT || config.get('app.port');
+const db = process.env.MONGO_URL || config.get('database.url');
 
 if (config.get('database.enabled')) {
-    mongoose.connect(process.env.MONGO_URL || config.get('database.url')).catch(log.error);
+    mongoose.connect(db).then(() => {
+        log.info(`Connected to ${db}`);
+    }).catch(err => {
+        log.error(err);
+        process.exit(1);
+    });
 } else {
     log.info('Starting without database');
 }

@@ -1,10 +1,8 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import loudRejection from 'loud-rejection';
-import jwt from 'express-jwt';
 import {errorHandler, notFoundHandler} from 'express-api-error-handler';
 
-import config from './config';
 import log from './log';
 import {post, user, token} from './routes';
 
@@ -16,12 +14,6 @@ const app = express();
 app.disable('x-powered-by');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
-
-app.post('*', jwt({
-    secret: config.get('jwt.secret')
-}).unless({
-    path: ['/token', '/user', '/user/']
-}));
 
 app.get('/', (req, res) => {
     res.sendStatus(200);

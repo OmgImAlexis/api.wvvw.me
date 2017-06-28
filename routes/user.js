@@ -21,7 +21,7 @@ router.get(['/', '/:id'], isValidObjectId, async (req, res, next) => {
         date: -1
     }).exec().catch(next);
 
-    res.send(users);
+    res.send({users});
 });
 
 router.post('/', (req, res, next) => {
